@@ -56,7 +56,7 @@ public class RegistrationManager
     private static void addVariant(Block original)
     {
         SignBlock originalCast = (SignBlock) original;
-        RegistryObject<Block> ourBlock = BLOCKS.register("hanging_sign_" + originalCast.type().name(), () -> new HangingSignBlock(originalCast));
+        RegistryObject<Block> ourBlock = BLOCKS.register("hanging_sign_1_" + originalCast.type().name(), () -> new HangingSignBlock(originalCast));
         signBlocks.add(ourBlock);
         signBlocksByOriginal.put(original, ourBlock);
     }
