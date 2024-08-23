@@ -1,11 +1,13 @@
 package moonfather.blocks_you_always_wanted.initialization;
 
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock;
+import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock1;
+import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock2;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SignBlock;
+import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -51,12 +53,22 @@ public class RegistrationManager
     static
     {
         addVariant(Blocks.OAK_HANGING_SIGN);
+        addVariant(Blocks.OAK_WALL_HANGING_SIGN);
         addVariant(Blocks.SPRUCE_HANGING_SIGN);
+        addVariant(Blocks.SPRUCE_WALL_HANGING_SIGN);
     }
     private static void addVariant(Block original)
     {
         SignBlock originalCast = (SignBlock) original;
-        RegistryObject<Block> ourBlock = BLOCKS.register("hanging_sign_1_" + originalCast.type().name(), () -> new HangingSignBlock(originalCast));
+        RegistryObject<Block> ourBlock;
+        if (! (original instanceof WallHangingSignBlock))
+        {
+            ourBlock = BLOCKS.register("hanging_sign_1_" + originalCast.type().name(), () -> new HangingSignBlock1(originalCast));
+        }
+        else
+        {
+            ourBlock = BLOCKS.register("hanging_sign_2_" + originalCast.type().name(), () -> new HangingSignBlock2(originalCast));
+        }
         signBlocks.add(ourBlock);
         signBlocksByOriginal.put(original, ourBlock);
     }

@@ -64,6 +64,21 @@ public class ShopSignBlockEntity extends BlockEntity
 
     ///////////////////////////////////////////
 
+    @Override
+    public net.minecraft.world.phys.AABB getRenderBoundingBox()
+    {
+        if (this.renderBox == null || ! this.getBlockPos().equals(this.lastPos))
+        {
+            this.renderBox = new net.minecraft.world.phys.AABB(this.getBlockPos(), this.getBlockPos().offset(1, 1, 1));
+            this.lastPos = this.getBlockPos();
+        }
+        return renderBox;
+    }
+    private net.minecraft.world.phys.AABB renderBox = null;
+    private BlockPos lastPos = null;
+
+    ///////////////////////////////////////////
+
     public ItemStack getItem()
     {
         return this.item;
