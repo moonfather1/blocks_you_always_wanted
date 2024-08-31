@@ -1,0 +1,6 @@
+{
+  "parent": "blocks_you_always_wanted:block/fence_technical_lantern1",
+  "textures": {
+    "lantern": "minecraft:block/soul_lantern"
+  }
+}

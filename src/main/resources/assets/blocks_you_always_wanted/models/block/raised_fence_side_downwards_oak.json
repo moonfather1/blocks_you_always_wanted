@@ -1,0 +1,8 @@
+{
+    "parent": "blocks_you_always_wanted:block/raised_fence_side_downwards",
+    "textures": 
+	{
+        "particle": "minecraft:block/oak_planks",
+        "fence": "minecraft:block/oak_planks"
+    }
+}

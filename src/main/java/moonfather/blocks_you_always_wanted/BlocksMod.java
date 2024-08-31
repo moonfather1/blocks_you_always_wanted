@@ -20,6 +20,24 @@ public class BlocksMod
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        //todo: collision
+        //+odo: initial state
+        //+odo: fence technical top, 3 states, 2 glow
+        //+odo: detect side+up change
+        //+odo: model torch and lantern
+        //+odo: Component.literal
+        //+odo: technical particles
+        //+odo: top variants swap
+        //+odo: top loot table
+        //+odo: upwards link
+        //+odo: event ignores fence type
+        //+odo: stone base?
+        //+odo: disap top
+        //+odo: message color
+        //no:   gates
+        //+odo: redstone signal
+        //todo: add fake collision above so that i can't jump over
+        //+odo: connect to solid posts
         RegistrationManager.init(modEventBus);
 //        modEventBus.addListener(this::addCreative);
 //        modEventBus.addListener(this::commonSetup);

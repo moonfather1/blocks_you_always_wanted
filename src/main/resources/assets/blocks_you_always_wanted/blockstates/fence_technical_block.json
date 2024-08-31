@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "top_variant=0": {
+      "model": "blocks_you_always_wanted:block/fence_technical_empty"
+    },
+    "top_variant=1": {
+      "model": "blocks_you_always_wanted:block/fence_technical_torch1"
+    },
+    "top_variant=2": {
+      "model": "blocks_you_always_wanted:block/fence_technical_lantern1"
+    },
+    "top_variant=3": {
+      "model": "blocks_you_always_wanted:block/fence_technical_lantern2"
+    },
+    "top_variant=4": {
+      "model": "blocks_you_always_wanted:block/fence_technical_torch2"
+    },
+    "top_variant=5": {
+      "model": "blocks_you_always_wanted:block/fence_technical_torch3"
+    }
+  }
+}

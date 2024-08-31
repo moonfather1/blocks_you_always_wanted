@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -34,7 +33,7 @@ public class TransformSignEvent
             {
                 return;
             }
-            Block replacement = RegistrationManager.getFromOriginal(original);
+            Block replacement = RegistrationManager.getSignFromOriginal(original);
             if (replacement == null) { return; }
             if (! event.getLevel().isClientSide)
             {

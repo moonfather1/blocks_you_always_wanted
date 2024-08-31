@@ -4,6 +4,11 @@
       "blocks_you_always_wanted:hanging_sign_1_oak",
       "blocks_you_always_wanted:hanging_sign_1_spruce",
       "blocks_you_always_wanted:hanging_sign_2_oak",
-      "blocks_you_always_wanted:hanging_sign_2_spruce"
+      "blocks_you_always_wanted:hanging_sign_2_spruce",
+      "blocks_you_always_wanted:fence_on_slab_oak",
+      "blocks_you_always_wanted:fence_on_slab_spruce",
+      "blocks_you_always_wanted:fence_technical_block",
+      "blocks_you_always_wanted:fence_on_stone_slab_oak",
+      "blocks_you_always_wanted:fence_on_stone_slab_spruce"
   ]
 }

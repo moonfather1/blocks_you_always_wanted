@@ -1,0 +1,6 @@
+{
+  "parent": "blocks_you_always_wanted:block/fence_technical_torch1",
+  "textures": {
+    "torch": "minecraft:block/redstone_torch"
+  }
+}

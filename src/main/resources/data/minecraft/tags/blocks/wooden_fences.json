@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "blocks_you_always_wanted:fence_on_slab_oak",
+    "blocks_you_always_wanted:fence_on_slab_spruce",
+    "blocks_you_always_wanted:fence_on_stone_slab_oak",
+    "blocks_you_always_wanted:fence_on_stone_slab_spruce"
+  ]
+}

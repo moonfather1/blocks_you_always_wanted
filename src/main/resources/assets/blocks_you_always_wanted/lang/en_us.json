@@ -2,5 +2,10 @@
   "block.blocks_you_always_wanted.hanging_sign_1_oak": "Hanging sign (oak)",
   "block.blocks_you_always_wanted.hanging_sign_1_spruce": "Hanging sign (spruce)",
   "block.blocks_you_always_wanted.hanging_sign_2_oak": "Hanging sign (oak)",
-  "block.blocks_you_always_wanted.hanging_sign_2_spruce": "Hanging sign (spruce)"
+  "block.blocks_you_always_wanted.hanging_sign_2_spruce": "Hanging sign (spruce)",
+  "block.blocks_you_always_wanted.fence_oak": "Fence (oak)",
+  "block.blocks_you_always_wanted.fence_spruce": "Fence (spruce)",
+  "block.blocks_you_always_wanted.fence_technical_block": "Fence",
+  "messages.blocks_you_always_wanted.no_room_above": "No room above the slab.",
+  "messages.blocks_you_always_wanted.wrong_slab": "Put fence onto a matching slab or a smoothstone slab."
 }

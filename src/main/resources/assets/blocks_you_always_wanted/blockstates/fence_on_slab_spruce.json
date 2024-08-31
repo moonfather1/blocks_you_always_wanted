@@ -1,0 +1,131 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_post_spruce"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/spruce_slab"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_spruce",
+        "uvlock": true
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_spruce",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_spruce",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_spruce",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true
+      },
+      "when": {
+        "north_dn": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east_dn": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_dn": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west_dn": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true
+      },
+      "when": {
+        "north_up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east_up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west_up": "true"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "minecraft:block/oak_planks"
+	},
+	"elements": [
+	]
+}

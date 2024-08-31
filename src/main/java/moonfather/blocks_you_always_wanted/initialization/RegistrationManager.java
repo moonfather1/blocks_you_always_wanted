@@ -1,6 +1,8 @@
 package moonfather.blocks_you_always_wanted.initialization;
 
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.blocks.FenceOnASlabBlock;
+import moonfather.blocks_you_always_wanted.blocks.FenceTechnicalBlock;
 import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock1;
 import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock2;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
@@ -35,7 +37,9 @@ public class RegistrationManager
 
     private static final List<Supplier<Block>> signBlocks = new ArrayList<>();
     private static final Map<Block, Supplier<Block>> signBlocksByOriginal = new HashMap<>(); // remove if original is made public
+    private static final Map<Integer, Supplier<Block>> fenceBlocksByOriginal = new HashMap<>();
     public static final RegistryObject<BlockEntityType<ShopSignBlockEntity>> SIGN_BE = BLOCK_ENTITIES.register("sign_be", () -> BlockEntityType.Builder.of(ShopSignBlockEntity::new, listToArray(signBlocks)).build(null));
+    public static final RegistryObject<Block> FENCE_TECHNICAL = BLOCKS.register("fence_technical_block", FenceTechnicalBlock::new);
 
     private static Block[] listToArray(List<Supplier<Block>> list)
     {
@@ -52,12 +56,17 @@ public class RegistrationManager
     // static initialization
     static
     {
-        addVariant(Blocks.OAK_HANGING_SIGN);
-        addVariant(Blocks.OAK_WALL_HANGING_SIGN);
-        addVariant(Blocks.SPRUCE_HANGING_SIGN);
-        addVariant(Blocks.SPRUCE_WALL_HANGING_SIGN);
+        addSignVariant(Blocks.OAK_HANGING_SIGN);
+        addSignVariant(Blocks.OAK_WALL_HANGING_SIGN);
+        addSignVariant(Blocks.SPRUCE_HANGING_SIGN);
+        addSignVariant(Blocks.SPRUCE_WALL_HANGING_SIGN);
+        addFenceVariant(Blocks.OAK_FENCE, Blocks.OAK_SLAB, "oak", "fence_on_slab_");
+        addFenceVariant(Blocks.SPRUCE_FENCE, Blocks.SPRUCE_SLAB, "spruce", "fence_on_slab_");
+        addFenceVariant(Blocks.OAK_FENCE, Blocks.SMOOTH_STONE_SLAB, "oak", "fence_on_stone_slab_");
+        addFenceVariant(Blocks.SPRUCE_FENCE, Blocks.SMOOTH_STONE_SLAB, "spruce", "fence_on_stone_slab_");
     }
-    private static void addVariant(Block original)
+
+    private static void addSignVariant(Block original)
     {
         SignBlock originalCast = (SignBlock) original;
         RegistryObject<Block> ourBlock;
@@ -73,10 +82,25 @@ public class RegistrationManager
         signBlocksByOriginal.put(original, ourBlock);
     }
 
+    private static void addFenceVariant(Block original, Block slab, String woodType, String prefix)
+    {
+        RegistryObject<Block> ourBlock = BLOCKS.register(prefix + woodType, () -> new FenceOnASlabBlock(original));
+        cacheFenceBlock(original, slab, ourBlock);
+    }
     /////////////////////////////////////////////////////////////////////
 
-    public static Block getFromOriginal(Block original)
+    public static Block getSignFromOriginal(Block original)
     {
         return signBlocksByOriginal.getOrDefault(original, ()->null).get();
+    }
+
+    public static Block getFenceFromOriginal(Block original, Block slab)
+    {
+        return fenceBlocksByOriginal.getOrDefault(original.hashCode() / 2 + slab.hashCode() / 2, ()->null).get();
+    }
+
+    private static void cacheFenceBlock(Block original, Block slab, Supplier<Block> ourFence)
+    {
+        fenceBlocksByOriginal.put(original.hashCode() / 2 + slab.hashCode() / 2, ourFence);
     }
 }
