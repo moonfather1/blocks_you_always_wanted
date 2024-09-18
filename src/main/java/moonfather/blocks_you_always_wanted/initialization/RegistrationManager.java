@@ -1,16 +1,16 @@
 package moonfather.blocks_you_always_wanted.initialization;
 
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.blocks.FenceOnASlabBlock;
-import moonfather.blocks_you_always_wanted.blocks.FenceTechnicalBlock;
-import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock1;
-import moonfather.blocks_you_always_wanted.blocks.HangingSignBlock2;
+import moonfather.blocks_you_always_wanted.blocks.*;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,11 +25,13 @@ import java.util.function.Supplier;
 public class RegistrationManager
 {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MODID);
 
     public static void init(IEventBus modBus)
     {
         BLOCKS.register(modBus);
+        ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
     }
 
@@ -64,6 +66,13 @@ public class RegistrationManager
         addFenceVariant(Blocks.SPRUCE_FENCE, Blocks.SPRUCE_SLAB, "spruce", "fence_on_slab_");
         addFenceVariant(Blocks.OAK_FENCE, Blocks.SMOOTH_STONE_SLAB, "oak", "fence_on_stone_slab_");
         addFenceVariant(Blocks.SPRUCE_FENCE, Blocks.SMOOTH_STONE_SLAB, "spruce", "fence_on_stone_slab_");
+
+        RegistryObject<Block> finalB1 = BLOCKS.register("gate_main_oak", () -> new GateBlock(Blocks.OAK_FENCE_GATE, WoodType.OAK));
+        ITEMS.register("gate_main_oak", () -> new BlockItem(finalB1.get(), new Item.Properties().stacksTo(1)));
+        RegistryObject<Block> finalB2 = BLOCKS.register("gate_main_spruce", () -> new GateBlock(Blocks.SPRUCE_FENCE_GATE, WoodType.SPRUCE));
+        ITEMS.register("gate_main_spruce", () -> new BlockItem(finalB2.get(), new Item.Properties().stacksTo(1)));
+        BLOCKS.register("gate_spec_oak", () -> new GateBlock_V2(Blocks.OAK_FENCE_GATE, Blocks.OAK_SLAB, WoodType.OAK));
+        BLOCKS.register("gate_spec_spruce", () -> new GateBlock_V2(Blocks.SPRUCE_FENCE_GATE, Blocks.SPRUCE_SLAB, WoodType.SPRUCE));
     }
 
     private static void addSignVariant(Block original)

@@ -1,5 +1,5 @@
 {
-    "parent": "blocks_you_always_wanted:block/raised_fence_side_upwards",
+    "parent": "blocks_you_always_wanted:block/template_raised_fence_side_upwards",
     "textures": 
 	{
         "particle": "minecraft:block/spruce_planks",

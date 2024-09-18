@@ -1,0 +1,332 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_closed_oak",
+        "y": 0
+      },
+      "when": {
+        "facing": "east",
+        "in_wall": false,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_open_oak",
+        "y": 0
+      },
+      "when": {
+        "facing": "east",
+        "in_wall": false,
+        "open": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_closed_oak",
+        "y": 0
+      },
+      "when": {
+        "facing": "east",
+        "in_wall": true,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_open_oak",
+        "y": 0
+      },
+      "when": {
+        "facing": "east",
+        "in_wall": true,
+        "open": true
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_closed_oak",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "in_wall": false,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_open_oak",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "in_wall": false,
+        "open": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_closed_oak",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "in_wall": true,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_open_oak",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "in_wall": true,
+        "open": true
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_closed_oak",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "in_wall": false,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_open_oak",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "in_wall": false,
+        "open": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_closed_oak",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "in_wall": true,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_open_oak",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "in_wall": true,
+        "open": true
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_closed_oak",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "in_wall": false,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_raised_open_oak",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "in_wall": false,
+        "open": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_closed_oak",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "in_wall": true,
+        "open": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/gate_wall_raised_open_oak",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "in_wall": true,
+        "open": true
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "minecraft:block/oak_slab"
+      },
+      "when": {
+        "block_below": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/smooth_stone_slab"
+      },
+      "when": {
+        "block_below": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_rail",
+        "y": 0
+      },
+      "when": {
+        "block_below": 3,
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_rail",
+        "y": 90
+      },
+      "when": {
+        "block_below": 3,
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_rail",
+        "y": 0
+      },
+      "when": {
+        "block_below": 3,
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_rail",
+        "y": 90
+      },
+      "when": {
+        "block_below": 3,
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail",
+        "y": 0
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "south",
+        "powered": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail",
+        "y": 90
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "east",
+        "powered": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail",
+        "y": 0
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "north",
+        "powered": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail",
+        "y": 90
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "west",
+        "powered": false
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail_lit",
+        "y": 0
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "south",
+        "powered": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail_lit",
+        "y": 90
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "east",
+        "powered": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail_lit",
+        "y": 0
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "north",
+        "powered": true
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/override_powered_rail_lit",
+        "y": 90
+      },
+      "when": {
+        "block_below": 4,
+        "facing": "west",
+        "powered": true
+      }
+    }
+  ]
+}

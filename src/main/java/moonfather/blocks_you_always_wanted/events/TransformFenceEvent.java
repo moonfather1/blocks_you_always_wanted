@@ -1,17 +1,14 @@
 package moonfather.blocks_you_always_wanted.events;
 
-import moonfather.blocks_you_always_wanted.blocks.FenceOnASlabBlock;
+import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,9 +22,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber
 public class TransformFenceEvent
 {
-    private static final Component MESSAGE_NO_ROOM = Component.translatable("messages.blocks_you_always_wanted.no_room_above").withStyle(Style.EMPTY.withColor(0xff999988));
-    private static final Component MESSAGE_WRONG = Component.translatable("messages.blocks_you_always_wanted.wrong_slab").withStyle(Style.EMPTY.withColor(0xff998855));
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
@@ -41,7 +35,7 @@ public class TransformFenceEvent
             Block replacement = RegistrationManager.getFenceFromOriginal(((BlockItem) event.getItemStack().getItem()).getBlock(), slab);
             if (replacement == null)
             {
-                event.getEntity().displayClientMessage(MESSAGE_WRONG, true);
+                event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_SLAB_TYPE, true);
                 event.setCancellationResult(InteractionResult.FAIL);
                 event.setCanceled(true);
                 return;
@@ -49,7 +43,7 @@ public class TransformFenceEvent
             BlockPos above = event.getHitVec().getBlockPos().above();
             if (! event.getLevel().getBlockState(above).canBeReplaced())
             {
-                event.getEntity().displayClientMessage(MESSAGE_NO_ROOM, true);
+                event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_NO_ROOM, true);
                 event.setCancellationResult(InteractionResult.FAIL);
                 event.setCanceled(true);
                 return;

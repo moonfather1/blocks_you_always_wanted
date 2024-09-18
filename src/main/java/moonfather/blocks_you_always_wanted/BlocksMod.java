@@ -38,6 +38,27 @@ public class BlocksMod
         //+odo: redstone signal
         //todo: add fake collision above so that i can't jump over
         //+odo: connect to solid posts
+
+        //+odo: gate: inventory
+        //+odo: gate: rail variant
+        //+odo: gate: slab variant
+        //+odo: gate: drops
+        //+odo: gate: furnace value
+        //+odo: gate: piston reaction
+        //+odo: gate: pick on spec gate
+        //+odo: gate: normal: interaction and collision
+        //+odo: gate: spec: interaction and collision, same likely
+        //+odo: gate: spec: lift model 1px
+        //+odo: gate: main: hole in connection side
+        //+odo: gate: rail functionality
+        //todo: gate: acceptable blocks on sides
+        //+odo: gate: spec on below removed
+        //todo: gate: rail click on normal wide
+        //+odo: gate: sloped rails?
+        //todo: craft gate msg in craft gui and on place
+        //todo: gate technical. has facing and just that. split interaction shape. test for "Rejecting UseItemOnPacket"
+        //+odo: try carry on, try packing tape.
+
         RegistrationManager.init(modEventBus);
 //        modEventBus.addListener(this::addCreative);
 //        modEventBus.addListener(this::commonSetup);

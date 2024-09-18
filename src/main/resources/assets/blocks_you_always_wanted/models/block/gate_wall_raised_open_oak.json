@@ -1,0 +1,8 @@
+{
+    "parent": "blocks_you_always_wanted:block/template_gate_wall_raised_open",
+    "textures": 
+	{
+        "particle": "minecraft:block/oak_planks",
+        "texture": "minecraft:block/oak_planks"
+    }
+}

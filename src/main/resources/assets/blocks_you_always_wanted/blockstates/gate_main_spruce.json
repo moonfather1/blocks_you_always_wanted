@@ -1,0 +1,68 @@
+{
+  "variants": {
+    "facing=east,in_wall=false,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_closed_spruce",
+      "y": 0
+    },
+    "facing=east,in_wall=false,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_open_spruce",
+      "y": 0
+    },
+    "facing=east,in_wall=true,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_wall_closed_spruce",
+      "y": 0
+    },
+    "facing=east,in_wall=true,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_wall_open_spruce",
+      "y": 0
+    },
+    "facing=north,in_wall=false,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_closed_spruce",
+      "y": 270
+    },
+    "facing=north,in_wall=false,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_open_spruce",
+      "y": 270
+    },
+    "facing=north,in_wall=true,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_wall_closed_spruce",
+      "y": 270
+    },
+    "facing=north,in_wall=true,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_wall_open_spruce",
+      "y": 270
+    },
+    "facing=south,in_wall=false,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_closed_spruce",
+      "y": 90
+    },
+    "facing=south,in_wall=false,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_open_spruce",
+      "y": 90
+    },
+    "facing=south,in_wall=true,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_wall_closed_spruce",
+      "y": 90
+    },
+    "facing=south,in_wall=true,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_wall_open_spruce",
+      "y": 90
+    },
+    "facing=west,in_wall=false,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_closed_spruce",
+      "y": 180
+    },
+    "facing=west,in_wall=false,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_open_spruce",
+      "y": 180
+    },
+    "facing=west,in_wall=true,open=false": {
+      "model": "blocks_you_always_wanted:block/gate_wall_closed_spruce",
+      "y": 180
+    },
+    "facing=west,in_wall=true,open=true": {
+      "model": "blocks_you_always_wanted:block/gate_wall_open_spruce",
+      "y": 180
+    }
+  }
+}
