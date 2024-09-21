@@ -16,14 +16,14 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -42,28 +42,29 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
     public static class ShapeSet
     {
         public static final VoxelShape EMPTY = Shapes.empty();
-        public static final VoxelShape Z_SHAPE = Block.box(-5.0D, 9.0D, 6.0D, 21.0D, 27.0D, 10.0D);
-        public static final VoxelShape X_SHAPE = Block.box(6.0D, 9.0D, -5.0D, 10.0D, 27.0D, 21.0D);
-        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, 9.0D, 6.0D, 20.0D, 27.0D, 10.0D);
-        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 9.0D, -4.0D, 10.0D, 27.0D, 20.0D);
+        public static final VoxelShape Z_SHAPE = Block.box(-5.0D, -8.0D, 6.0D, 21.0D, 10.0D, 10.0D);
+        public static final VoxelShape X_SHAPE = Block.box(6.0D, -8.0D, -5.0D, 10.0D, 10.0D, 21.0D);
+        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, -6.0D, 6.0D, 20.0D, 11.0D, 10.0D);
+        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, -6.0D, -4.0D, 10.0D, 11.0D, 20.0D);
         public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 0.0D, 6.0D, 20.0D, 28.0D, 10.0D);
         public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 0.0D, -4.0D, 10.0D, 28.0D, 20.0D);
         public static final VoxelShape Z_SUPPORT_SHAPE = Z_SHAPE;
         public static final VoxelShape X_SUPPORT_SHAPE = X_SHAPE;
-        public static final VoxelShape Z_OCCLUSION_SHAPE = Shapes.or(Block.box(-5.0D, 3.0D, 7.0D, -3.0D, 26.0D, 9.0D), Block.box(19.0D, 3.0D, 7.0D, 21.0D, 26.0D, 9.0D));
-        public static final VoxelShape X_OCCLUSION_SHAPE = Shapes.or(Block.box(7.0D, 5.0D, -5.0D, 9.0D, 26.0D, -3.0D), Block.box(7.0D, 3.0D, 19.0D, 9.0D, 26.0D, 21.0D));
-        public static final VoxelShape Z_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(-4.0D, 3.0D, 7.0D, -2.0D, 26.0D, 9.0D), Block.box(18.0D, 3.0D, 7.0D, 20.0D, 26.0D, 9.0D));
-        public static final VoxelShape X_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(7.0D, 5.0D, -4.0D, 9.0D, 26.0D, -2.0D), Block.box(7.0D, 3.0D, 18.0D, 9.0D, 26.0D, 20.0D));
+        public static final VoxelShape Z_OCCLUSION_SHAPE = Shapes.or(Block.box(-5.0D, 0.0D, 7.0D, -3.0D, 10.0D, 9.0D), Block.box(19.0D, 0.0D, 7.0D, 21.0D, 10.0D, 9.0D));
+        public static final VoxelShape X_OCCLUSION_SHAPE = Shapes.or(Block.box(7.0D, 0.0D, -5.0D, 9.0D, 10.0D, -3.0D), Block.box(7.0D, 0.0D, 19.0D, 9.0D, 10.0D, 21.0D));
+        public static final VoxelShape Z_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(-4.0D, 0.0D, 7.0D, -2.0D, 10.0D, 9.0D), Block.box(18.0D, 0.0D, 7.0D, 20.0D, 10.0D, 9.0D));
+        public static final VoxelShape X_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(7.0D, 0.0D, -4.0D, 9.0D, 10.0D, -2.0D), Block.box(7.0D, 0.0D, 18.0D, 9.0D, 10.0D, 20.0D));
     }
 
     public GateTechnicalBlock()
     {
-        super(Properties.of());
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(2.0F, 3.0F).noParticlesOnBreak());
         this.registerDefaultState(this.stateDefinition.any().setValue(IN_WALL, Boolean.FALSE));
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public VoxelShape getShape(BlockState p_53391_, BlockGetter p_53392_, BlockPos p_53393_, CollisionContext p_53394_) {
         if (p_53391_.getValue(IN_WALL)) {
             return p_53391_.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE_NARROW : ShapeSet.Z_SHAPE_NARROW;
@@ -72,16 +73,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         }
     }
 
-    public BlockState updateShape(BlockState p_53382_, Direction p_53383_, BlockState p_53384_, LevelAccessor p_53385_, BlockPos p_53386_, BlockPos p_53387_) {
-        Direction.Axis direction$axis = p_53383_.getAxis();
-        if (p_53382_.getValue(FACING).getClockWise().getAxis() != direction$axis) {
-            return super.updateShape(p_53382_, p_53383_, p_53384_, p_53385_, p_53386_, p_53387_);
-        } else {
-            boolean flag = this.isWall(p_53384_) || this.isWall(p_53385_.getBlockState(p_53386_.relative(p_53383_.getOpposite())));
-            return p_53382_.setValue(IN_WALL, Boolean.valueOf(flag));
-        }
-    }
-
+    @Override
     public VoxelShape getBlockSupportShape(BlockState p_253862_, BlockGetter p_254569_, BlockPos p_254197_) {
         if (false)
         //if (p_253862_.getValue(OPEN))
@@ -92,16 +84,13 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         }
     }
 
+    @Override
     public VoxelShape getCollisionShape(BlockState blockState, BlockGetter p_53397_, BlockPos p_53398_, CollisionContext p_53399_)
     {
-        if (false)
-        //if (blockState.getValue(OPEN))
-        {
-            return ShapeSet.EMPTY;
-        }
-        return blockState.getValue(FACING).getAxis() == Direction.Axis.Z ? ShapeSet.Z_COLLISION_SHAPE : ShapeSet.X_COLLISION_SHAPE;
+        return ShapeSet.EMPTY;
     }
 
+    @Override
     public VoxelShape getOcclusionShape(BlockState p_53401_, BlockGetter p_53402_, BlockPos p_53403_) {
         if (p_53401_.getValue(IN_WALL)) {
             return p_53401_.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_OCCLUSION_SHAPE_NARROW : ShapeSet.Z_OCCLUSION_SHAPE_NARROW;
@@ -110,6 +99,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         }
     }
 
+    @Override
     public boolean isPathfindable(BlockState p_53360_, BlockGetter p_53361_, BlockPos p_53362_, PathComputationType p_53363_) {
         switch (p_53363_) {
             case LAND:
@@ -128,6 +118,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         return other.is(BlockTags.WALLS);
     }
 
+    @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
     {
         BlockPos below = blockPos.below();
@@ -135,14 +126,50 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         return belowState.getBlock().use(belowState, level, below, player, hand, blockHitResult.withPosition(below));
     }
 
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos p_53376_, boolean p_53377_)
+    @Override
+    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_53377_)
     {
         if (! level.isClientSide)
         {
-            updateGateType(blockState, level, blockPos, p_53375_, p_53376_);
+            // check block below
+            if (blockPos.getX() == otherPos.getX() && blockPos.getZ() == otherPos.getZ() && blockPos.getY() - 1 == otherPos.getY())
+            {
+                BlockState below = level.getBlockState(otherPos);
+                if (below.getBlock() instanceof GateBlock || below.getBlock() instanceof GateBlock_V2)
+                {
+                    if (blockState.getValue(FACING) != below.getValue(FACING) || blockState.getValue(IN_WALL) != below.getValue(IN_WALL))
+                    {
+                        level.setBlock(blockPos, blockState.getBlock().withPropertiesOf(below), 2);
+                    }
+                }
+                else
+                {
+                    level.destroyBlock(blockPos, false);
+                }
+                return;
+            }
+            // below done
+            // something piston-pushed next to the gate?
+            if (otherPos.getY() == blockPos.getY())
+            {
+                Direction facing = level.getBlockState(blockPos.below()).getValue(FACING);
+                boolean onSide = ((blockPos.getX() == otherPos.getX()) && facing.getAxis().equals(Direction.Axis.X))
+                        || ((blockPos.getZ() == otherPos.getZ()) && facing.getAxis().equals(Direction.Axis.Z));
+                if (onSide) // don't check front of gate
+                {
+                    BlockState other = level.getBlockState(otherPos);
+                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS))
+                    {
+                        level.destroyBlock(blockPos, true);
+                    }
+                }
+            }
+            // walls. not trivial so moving to a separate method.
+            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, p_53377_);
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder)
     {
         stateBuilder.add(FACING, IN_WALL);
@@ -150,9 +177,18 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void updateGateType(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos p_53376_)
+    private void updateWallProperty(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_12345_)
     {
-
+        if (otherPos.getY() == blockPos.getY())
+        {
+            boolean hasWallOnTheSide = this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getClockWise()))) || this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getCounterClockWise())));
+            if (blockState.getValue(IN_WALL) != hasWallOnTheSide)
+            {
+                BlockPos belowPos = blockPos.below();
+                BlockState belowState = level.getBlockState(belowPos);
+                belowState.getBlock().neighborChanged(belowState, level, belowPos, Blocks.STONE_BRICK_WALL, blockPos, p_12345_);
+            }
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,5 +206,4 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         BlockState belowState = level.getBlockState(below);
         return belowState.getCloneItemStack(target, level, below, player);
     }
-
 }

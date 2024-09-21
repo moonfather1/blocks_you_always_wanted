@@ -6,7 +6,8 @@
   "block.blocks_you_always_wanted.fence_oak": "Fence (oak)",
   "block.blocks_you_always_wanted.fence_spruce": "Fence (spruce)",
   "block.blocks_you_always_wanted.fence_technical_block": "Fence",
-  "messages.blocks_you_always_wanted.no_room_above": "No room above the slab.",
+  "messages.blocks_you_always_wanted.no_room_above": "No room above that block.",
+  "messages.blocks_you_always_wanted.no_room_on_side": "Not enough room on the side of that block.",
   "messages.blocks_you_always_wanted.wrong_slab": "Fences/gates can be put onto a matching slab or a smooth-stone slab.",
   "messages.blocks_you_always_wanted.craft_wide_gate": "Try crafting a wide gate from two small ones.",
   "messages.blocks_you_always_wanted.rail_type": "Put the gate over powered rail or a common iron rail.",
@@ -15,5 +16,6 @@
   "block.blocks_you_always_wanted.gate_main_oak": "Wide gate (oak)",
   "block.blocks_you_always_wanted.gate_main_spruce": "Wide gate (spruce)",
   "block.blocks_you_always_wanted.gate_spec_oak": "Wide gate (oak)",
-  "block.blocks_you_always_wanted.gate_spec_spruce": "Wide gate (spruce)"
+  "block.blocks_you_always_wanted.gate_spec_spruce": "Wide gate (spruce)",
+  "block.blocks_you_always_wanted.gate_technical_block": "Wide gate"
 }

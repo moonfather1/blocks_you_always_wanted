@@ -51,12 +51,12 @@ public class BlocksMod
         //+odo: gate: spec: lift model 1px
         //+odo: gate: main: hole in connection side
         //+odo: gate: rail functionality
-        //todo: gate: acceptable blocks on sides
+        //+odo: gate: acceptable blocks on sides          REFUSE DIRT++         BREAK ON PISTON MOVING SOMETHING++    ++DISALLOW PLACING GATE NEXT TO NON-FENCE-NON-WALL
         //+odo: gate: spec on below removed
-        //todo: gate: rail click on normal wide
+        //+odo: gate: rail click on normal wide                   RAIL DUPE ISSUE++          NO CHECK FOR SOLID BELOW++
         //+odo: gate: sloped rails?
-        //todo: craft gate msg in craft gui and on place
-        //todo: gate technical. has facing and just that. split interaction shape. test for "Rejecting UseItemOnPacket"
+        //+odo: craft gate msg in craft gui and on place
+        //+odo: gate technical. has facing and just that. split interaction shape. test for "Rejecting UseItemOnPacket"
         //+odo: try carry on, try packing tape.
 
         RegistrationManager.init(modEventBus);

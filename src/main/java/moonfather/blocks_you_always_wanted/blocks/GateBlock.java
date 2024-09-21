@@ -1,5 +1,6 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -41,19 +42,19 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     public static class ShapeSet
     {
+        public static final VoxelShape EMPTY = Shapes.empty();
         public static final VoxelShape Z_SHAPE = Block.box(-5.0D, 3.0D, 6.0D, 21.0D, 26.0D, 10.0D);
         public static final VoxelShape X_SHAPE = Block.box(6.0D, 3.0D, -5.0D, 10.0D, 26.0D, 21.0D);
         public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, 3.0D, 6.0D, 20.0D, 26.0D, 10.0D);
-        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 3.0D, -4.0D, 10.0D, 26.0D, 20.0D);
+        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 3.0D, -4.0D, 10.0D, 26.0D, 20.0D);//26->25
         public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 2.0D, 6.0D, 20.0D, 28.0D, 10.0D);
         public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 2.0D, -4.0D, 10.0D, 28.0D, 20.0D);
-        public static final VoxelShape Z_SUPPORT_SHAPE = Z_SHAPE;
-        public static final VoxelShape X_SUPPORT_SHAPE = X_SHAPE;
-        public static final VoxelShape Z_OCCLUSION_SHAPE = Shapes.or(Block.box(-5.0D, 3.0D, 7.0D, -3.0D, 26.0D, 9.0D), Block.box(19.0D, 3.0D, 7.0D, 21.0D, 26.0D, 9.0D));
-        public static final VoxelShape X_OCCLUSION_SHAPE = Shapes.or(Block.box(7.0D, 5.0D, -5.0D, 9.0D, 26.0D, -3.0D), Block.box(7.0D, 3.0D, 19.0D, 9.0D, 26.0D, 21.0D));
-        public static final VoxelShape Z_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(-4.0D, 3.0D, 7.0D, -2.0D, 26.0D, 9.0D), Block.box(18.0D, 3.0D, 7.0D, 20.0D, 26.0D, 9.0D));
-        public static final VoxelShape X_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(7.0D, 5.0D, -4.0D, 9.0D, 26.0D, -2.0D), Block.box(7.0D, 3.0D, 18.0D, 9.0D, 26.0D, 20.0D));
-        public static final VoxelShape EMPTY = Shapes.empty();
+        public static final VoxelShape Z_SUPPORT_SHAPE = EMPTY;
+        public static final VoxelShape X_SUPPORT_SHAPE = EMPTY;
+        public static final VoxelShape Z_OCCLUSION_SHAPE = Shapes.or(Block.box(-5.0D, 3.0D, 7.0D, -3.0D, 16.0D, 9.0D), Block.box(19.0D, 3.0D, 7.0D, 21.0D, 16.0D, 9.0D));
+        public static final VoxelShape X_OCCLUSION_SHAPE = Shapes.or(Block.box(7.0D, 5.0D, -5.0D, 9.0D, 16.0D, -3.0D), Block.box(7.0D, 3.0D, 19.0D, 9.0D, 16.0D, 21.0D));
+        public static final VoxelShape Z_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(-4.0D, 3.0D, 7.0D, -2.0D, 16.0D, 9.0D), Block.box(18.0D, 3.0D, 7.0D, 20.0D, 16.0D, 9.0D));
+        public static final VoxelShape X_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(7.0D, 5.0D, -4.0D, 9.0D, 16.0D, -2.0D), Block.box(7.0D, 3.0D, 18.0D, 9.0D, 16.0D, 20.0D));
     }
     private final net.minecraft.sounds.SoundEvent openSound;
     private final net.minecraft.sounds.SoundEvent closeSound;
@@ -73,6 +74,7 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public VoxelShape getShape(BlockState p_53391_, BlockGetter p_53392_, BlockPos p_53393_, CollisionContext p_53394_) {
         if (p_53391_.getValue(IN_WALL)) {
             return p_53391_.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE_NARROW : ShapeSet.Z_SHAPE_NARROW;
@@ -81,16 +83,12 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
     }
 
+    @Override
     public BlockState updateShape(BlockState p_53382_, Direction p_53383_, BlockState p_53384_, LevelAccessor p_53385_, BlockPos p_53386_, BlockPos p_53387_) {
-        Direction.Axis direction$axis = p_53383_.getAxis();
-        if (p_53382_.getValue(FACING).getClockWise().getAxis() != direction$axis) {
-            return super.updateShape(p_53382_, p_53383_, p_53384_, p_53385_, p_53386_, p_53387_);
-        } else {
-            boolean flag = this.isWall(p_53384_) || this.isWall(p_53385_.getBlockState(p_53386_.relative(p_53383_.getOpposite())));
-            return p_53382_.setValue(IN_WALL, Boolean.valueOf(flag));
-        }
+        return super.updateShape(p_53382_, p_53383_, p_53384_, p_53385_, p_53386_, p_53387_);
     }
 
+    @Override
     public VoxelShape getBlockSupportShape(BlockState p_253862_, BlockGetter p_254569_, BlockPos p_254197_) {
         if (p_253862_.getValue(OPEN)) {
             return ShapeSet.EMPTY;
@@ -99,6 +97,7 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
     }
 
+    @Override
     public VoxelShape getCollisionShape(BlockState p_53396_, BlockGetter p_53397_, BlockPos p_53398_, CollisionContext p_53399_) {
         if (p_53396_.getValue(OPEN)) {
             return ShapeSet.EMPTY;
@@ -107,6 +106,7 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
     }
 
+    @Override
     public VoxelShape getOcclusionShape(BlockState p_53401_, BlockGetter p_53402_, BlockPos p_53403_) {
         if (p_53401_.getValue(IN_WALL)) {
             return p_53401_.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_OCCLUSION_SHAPE_NARROW : ShapeSet.Z_OCCLUSION_SHAPE_NARROW;
@@ -115,6 +115,7 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
     }
 
+    @Override
     public boolean isPathfindable(BlockState p_53360_, BlockGetter p_53361_, BlockPos p_53362_, PathComputationType p_53363_) {
         switch (p_53363_) {
             case LAND:
@@ -128,6 +129,9 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
     }
 
+    //////////////////////////////////////////////////////
+
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext)
     {
         Level level = blockPlaceContext.getLevel();
@@ -144,14 +148,26 @@ public class GateBlock extends HorizontalDirectionalBlock
         return other.is(BlockTags.WALLS);
     }
 
+
+
+    @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
     {
         // normal gate to raised gate conversion.
         if (hand.equals(InteractionHand.MAIN_HAND) && (player.getMainHandItem().is(Items.RAIL) || player.getMainHandItem().is(Items.POWERED_RAIL)))
         {
+            BlockPos below = blockPos.below();
+            if (! level.getBlockState(below).isFaceSturdy(level, below, Direction.UP))
+            {
+                return InteractionResult.FAIL;
+            }
             blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState).setValue(GateBlock_V2.BLOCK_BELOW, GateBlock.railToStateIndex(player.getMainHandItem().getItem()));
             level.setBlock(blockPos, blockState, 11);
             level.playSound(player, blockPos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+            if (! player.isCreative())
+            {
+                player.getMainHandItem().shrink(1);
+            }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         //System.out.println("~~~cli==" + level.isClientSide + ",  dist==" + player.position().distanceTo(blockPos.getCenter()));
@@ -177,10 +193,23 @@ public class GateBlock extends HorizontalDirectionalBlock
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos p_53376_, boolean p_53377_)
+
+
+    @Override
+    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_53377_)
     {
         if (! level.isClientSide)
         {
+            // technical block above
+            if (blockPos.getX() == otherPos.getX() && blockPos.getZ() == otherPos.getZ() && blockPos.getY() + 1 == otherPos.getY())
+            {
+                BlockState above = level.getBlockState(otherPos);
+                if (! (above.getBlock() instanceof GateTechnicalBlock))
+                {
+                    level.destroyBlock(blockPos, true);
+                }
+            }
+            // signal
             boolean hasNeighborSignal = level.hasNeighborSignal(blockPos);
             if (blockState.getValue(POWERED) != hasNeighborSignal)
             {
@@ -190,11 +219,39 @@ public class GateBlock extends HorizontalDirectionalBlock
                     level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
                     level.gameEvent((Entity)null, hasNeighborSignal ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
                 }
-                updateGateType(blockState, level, blockPos, p_53375_, p_53376_);
             }
+            // something piston-pushed next to the gate?
+            if (otherPos.getY() == blockPos.getY())
+            {
+                boolean onSide = ((blockPos.getX() == otherPos.getX()) && blockState.getValue(FACING).getAxis().equals(Direction.Axis.X))
+                        || ((blockPos.getZ() == otherPos.getZ()) && blockState.getValue(FACING).getAxis().equals(Direction.Axis.Z));
+                if (onSide) // don't check front of gate
+                {
+                    BlockState other = level.getBlockState(otherPos);
+                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS))
+                    {
+                        level.destroyBlock(blockPos, true);
+                    }
+                }
+            }
+            // walls. not trivial so moving to a separate method.
+            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, p_53377_);
         }
     }
 
+
+
+    @Override
+    public void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState p_60569_, boolean p_60570_)
+    {
+        super.onPlace(blockState, level, blockPos, p_60569_, p_60570_);
+        BlockState pt2 = RegistrationManager.GATE_TECHNICAL.get().withPropertiesOf(blockState);
+        level.setBlockAndUpdate(blockPos.above(), pt2);
+    }
+
+
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder)
     {
         stateBuilder.add(FACING, OPEN, POWERED, IN_WALL);
@@ -202,9 +259,40 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void updateGateType(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos p_53376_)
+    private void updateWallProperty(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_12345_)
     {
-
+        boolean needFullUpdate = false;
+        if (blockPos.getX() == otherPos.getX() && blockPos.getZ() == otherPos.getZ() && blockPos.getY() + 1 == otherPos.getY() && p_53375_.equals(Blocks.STONE_BRICK_WALL))
+        {
+            needFullUpdate = true;
+        }
+        if (otherPos.getY() == blockPos.getY())
+        {
+            boolean hasWallOnTheSide = this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getClockWise()))) || this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getCounterClockWise())));
+            if (blockState.getValue(IN_WALL) == hasWallOnTheSide)
+            {
+                return;
+            }
+            if (hasWallOnTheSide)
+            {
+                // first wall; will propagate above normally
+                level.setBlockAndUpdate(blockPos, blockState.setValue(IN_WALL, true));
+            }
+            else
+            {
+                // wall removed. but there maybe walls in above row, and we may not need to change state.
+                needFullUpdate = true;
+            }
+        }
+        if (! needFullUpdate)
+        {
+            return;
+        }
+        boolean hasWallOnTheSide = this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getClockWise())))
+                                || this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getCounterClockWise())))
+                                || this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getClockWise()).above()))
+                                || this.isWall(level.getBlockState(blockPos.relative(blockState.getValue(FACING).getCounterClockWise()).above()));
+        level.setBlockAndUpdate(blockPos, blockState.setValue(IN_WALL, hasWallOnTheSide));
     }
 
     @Override
@@ -215,9 +303,9 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     /////////////////////////////////////////////////////////////////////////////////
 
-    public static Block toRaisedGate(Block raisedGate)
+    public static Block toRaisedGate(Block normalGate)
     {
-        ResourceLocation gateRL = ForgeRegistries.BLOCKS.getKey(raisedGate);
+        ResourceLocation gateRL = ForgeRegistries.BLOCKS.getKey(normalGate);
         gateRL = new ResourceLocation(gateRL.getNamespace(), gateRL.getPath().replace("gate_main", "gate_spec"));
         return ForgeRegistries.BLOCKS.getValue(gateRL);
     }

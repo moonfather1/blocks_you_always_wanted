@@ -8,9 +8,11 @@
 
       "blocks_you_always_wanted:fence_on_slab_oak",
       "blocks_you_always_wanted:fence_on_slab_spruce",
-      "blocks_you_always_wanted:fence_technical_block",
       "blocks_you_always_wanted:fence_on_stone_slab_oak",
       "blocks_you_always_wanted:fence_on_stone_slab_spruce",
+
+      "blocks_you_always_wanted:fence_technical_block",
+      "blocks_you_always_wanted:gate_technical_block",
 
       "blocks_you_always_wanted:gate_main_oak",
       "blocks_you_always_wanted:gate_main_spruce",

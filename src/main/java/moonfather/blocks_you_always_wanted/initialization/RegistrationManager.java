@@ -42,6 +42,7 @@ public class RegistrationManager
     private static final Map<Integer, Supplier<Block>> fenceBlocksByOriginal = new HashMap<>();
     public static final RegistryObject<BlockEntityType<ShopSignBlockEntity>> SIGN_BE = BLOCK_ENTITIES.register("sign_be", () -> BlockEntityType.Builder.of(ShopSignBlockEntity::new, listToArray(signBlocks)).build(null));
     public static final RegistryObject<Block> FENCE_TECHNICAL = BLOCKS.register("fence_technical_block", FenceTechnicalBlock::new);
+    public static final RegistryObject<Block> GATE_TECHNICAL = BLOCKS.register("gate_technical_block", GateTechnicalBlock::new);
 
     private static Block[] listToArray(List<Supplier<Block>> list)
     {

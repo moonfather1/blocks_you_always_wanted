@@ -3,9 +3,12 @@ package moonfather.blocks_you_always_wanted.events;
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
+import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
@@ -117,6 +120,8 @@ public class TransformGateEvent
                 BlockState newState = replacement.getStateForPlacement(context)
                         .setValue(GateBlock_V2.BLOCK_BELOW, GateBlock.blockToStateIndex(slab, rail));
                 event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos(), newState);
+                BlockState pt2 = RegistrationManager.GATE_TECHNICAL.get().withPropertiesOf(newState);
+                event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), pt2);
             }
             if (! event.getEntity().isCreative())
             {
@@ -130,30 +135,23 @@ public class TransformGateEvent
         {
             if (! event.getLevel().isClientSide && event.getFace() != null && event.getFace().equals(Direction.UP))
             {
-                BlockState above = event.getLevel().getBlockState(event.getHitVec().getBlockPos().above());
-                if (above.getBlock() instanceof GateBlock gate)
+                if (event.getLevel().getBlockState(event.getHitVec().getBlockPos()).isFaceSturdy(event.getLevel(), event.getHitVec().getBlockPos(), Direction.UP))
                 {
-                    ResourceLocation gateRL = ForgeRegistries.BLOCKS.getKey(gate);
-                    if (gateRL == null)
+                    BlockState above = event.getLevel().getBlockState(event.getHitVec().getBlockPos().above());
+                    if (above.getBlock() instanceof GateBlock gate)
                     {
-                        return;
+                        Block replacement = GateBlock.toRaisedGate(gate);
+                        BlockState newState = replacement.withPropertiesOf(above)
+                                                         .setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.POWERED_RAIL) ? GateBlock_V2.ON_POWERED_RAIL : GateBlock_V2.ON_REGULAR_RAIL);
+                        event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), newState);
+                        event.getLevel().playSound(event.getEntity(), event.getHitVec().getBlockPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, event.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
+                        if (!event.getEntity().isCreative())
+                        {
+                            event.getItemStack().shrink(1);
+                        }
+                        event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+                        event.setCanceled(true);
                     }
-                    gateRL = new ResourceLocation(gateRL.getNamespace(), gateRL.getPath().replace("gate_main", "gate_spec"));
-                    Block replacement = ForgeRegistries.BLOCKS.getValue(gateRL);
-                    if (replacement == null)
-                    {
-                        return;
-                    }
-
-                    BlockState newState = replacement.withPropertiesOf(above)
-                             .setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.POWERED_RAIL) ? GateBlock_V2.ON_POWERED_RAIL : GateBlock_V2.ON_REGULAR_RAIL);
-                    event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), newState);
-                    if (! event.getEntity().isCreative())
-                    {
-                        event.getItemStack().shrink(1);
-                    }
-                    event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
-                    event.setCanceled(true);
                 }
             }
         }
