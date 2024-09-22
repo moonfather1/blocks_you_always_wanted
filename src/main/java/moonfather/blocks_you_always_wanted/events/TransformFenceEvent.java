@@ -1,6 +1,7 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,6 +26,11 @@ public class TransformFenceEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
+        if (! MainConfig.COMMON.FencesEnabled.get())
+        {
+            return; // todo: don't register event on 1.21
+        }
+
         BlockState state = event.getLevel().getBlockState(event.getHitVec().getBlockPos());
         if (event.getItemStack() != ItemStack.EMPTY && state.getBlock() instanceof SlabBlock slab && event.getFace() != null && event.getFace().equals(Direction.UP) && event.getItemStack().is(ItemTags.FENCES))
         {

@@ -13,5 +13,12 @@
   "result": {
     "count": 1,
     "item": "blocks_you_always_wanted:gate_main_spruce"
-  }
+  },
+  "conditions":
+  [
+    {
+      "type": "blocks_you_always_wanted:optional",
+      "flag_code": "gates_enabled"
+    }
+  ]
 }

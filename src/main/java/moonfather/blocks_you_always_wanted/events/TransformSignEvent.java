@@ -1,6 +1,7 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -25,6 +26,10 @@ public class TransformSignEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
+        if (! MainConfig.COMMON.HangingSignsEnabled.get())
+        {
+            return; // todo: don't register event on 1.21
+        }
         BlockState state = event.getLevel().getBlockState(event.getHitVec().getBlockPos());
         if (event.getItemStack() != ItemStack.EMPTY && state.getBlock() instanceof SignBlock original && event.getFace() != null && ! event.getFace().equals(Direction.DOWN) && ! event.getItemStack().is(Items.HONEYCOMB) && ! event.getItemStack().is(Constants.Tags.GC_WAX))
         {

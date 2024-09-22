@@ -1,14 +1,19 @@
 package moonfather.blocks_you_always_wanted;
 
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -19,6 +24,7 @@ public class BlocksMod
     public BlocksMod()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MainConfig.COMMON_SPEC);
 
         //todo: collision
         //+odo: initial state
@@ -61,7 +67,12 @@ public class BlocksMod
 
         RegistrationManager.init(modEventBus);
 //        modEventBus.addListener(this::addCreative);
-//        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::commonSetup);
+    }
+
+    public void commonSetup(FMLCommonSetupEvent event)
+    {
+        CraftingHelper.register(new OptionalRecipeCondition.Serializer(new ResourceLocation(Constants.MODID, "optional")));;
     }
 
 //    // Add the example block item to the building blocks tab

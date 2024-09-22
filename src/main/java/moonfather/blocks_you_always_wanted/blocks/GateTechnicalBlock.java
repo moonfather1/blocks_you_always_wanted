@@ -44,8 +44,8 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
         public static final VoxelShape EMPTY = Shapes.empty();
         public static final VoxelShape Z_SHAPE = Block.box(-5.0D, -8.0D, 6.0D, 21.0D, 10.0D, 10.0D);
         public static final VoxelShape X_SHAPE = Block.box(6.0D, -8.0D, -5.0D, 10.0D, 10.0D, 21.0D);
-        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, -6.0D, 6.0D, 20.0D, 11.0D, 10.0D);
-        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, -6.0D, -4.0D, 10.0D, 11.0D, 20.0D);
+        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, -6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
+        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, -6.0D, -4.0D, 10.0D, 10.0D, 20.0D);
         public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 0.0D, 6.0D, 20.0D, 28.0D, 10.0D);
         public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 0.0D, -4.0D, 10.0D, 28.0D, 20.0D);
         public static final VoxelShape Z_SUPPORT_SHAPE = Z_SHAPE;

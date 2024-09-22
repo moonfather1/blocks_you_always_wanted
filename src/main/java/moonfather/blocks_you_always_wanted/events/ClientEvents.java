@@ -1,6 +1,7 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -17,6 +18,10 @@ public class ClientEvents
     @SubscribeEvent
     public static void onGateTooltip(ItemTooltipEvent event)
     {
+        if (! MainConfig.COMMON.GatesEnabled.get())
+        {
+            return; // todo: don't register event on 1.21
+        }
         if (event.getEntity() != null && event.getItemStack().is(ItemTags.FENCE_GATES))
         {
             if (event.getItemStack().getItem() instanceof BlockItem bi && ! (bi.getBlock() instanceof GateBlock))

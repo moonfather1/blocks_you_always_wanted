@@ -1,6 +1,7 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
 import moonfather.blocks_you_always_wanted.blocks.GateTechnicalBlock;
@@ -42,6 +43,10 @@ public class OtherEvents
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlaceGate(BlockEvent.EntityPlaceEvent event)
     {
+        if (! MainConfig.COMMON.GatesEnabled.get())
+        {
+            return; // todo: don't register event on 1.21
+        }
         if (event.getPlacedBlock().is(BlockTags.FENCE_GATES))
         {
             if (! (event.getPlacedBlock().getBlock() instanceof GateBlock) && event.getEntity() instanceof Player player)
