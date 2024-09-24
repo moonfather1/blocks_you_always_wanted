@@ -2,6 +2,8 @@ package moonfather.blocks_you_always_wanted.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -34,6 +37,7 @@ public class FenceOnASlabBlock extends FenceBlock
         if (collisionShapes == null)
         {
             collisionShapes = new VoxelShape[16*16*16];
+            interactionShapes = new VoxelShape[16*16*16];
             makeShapes();
         }
     }
@@ -41,7 +45,7 @@ public class FenceOnASlabBlock extends FenceBlock
 
     ////////////////////////////////////////////////
 
-    private static final VoxelShape SHAPE_POST = Block.box(6.0D, 8.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    private static final VoxelShape SHAPE_POST = Block.box(6.0D, 8.0D, 6.0D, 10.0D, 24.0D, 10.0D);
     private static final VoxelShape SHAPE_SLAB = Block.box(0.0D, 0.0D, 0.0D, 16.0D,  8.0D, 16.0D);
     private static final VoxelShape SHAPE_MAIN = Shapes.or(SHAPE_SLAB, SHAPE_POST);
     private static final VoxelShape SHAPE_HOR_WEST = Block.box(00.0D, 14.0D, 6.0D, 06.0D,  23.0D, 10.0D); //7-9
@@ -52,10 +56,26 @@ public class FenceOnASlabBlock extends FenceBlock
     private static final VoxelShape SHAPE_DN_EAST = Block.box(10.0D, 08.0D, 6.0D, 16.0D,  19.0D, 10.0D);
     private static final VoxelShape SHAPE_DN_NORTH = Block.box(6.0D, 08.0D, 00.0D, 10.0D,  19.0D, 06.0D);
     private static final VoxelShape SHAPE_DN_SOUTH = Block.box(6.0D, 08.0D, 10.0D, 10.0D,  19.0D, 16.0D);
-    private static final VoxelShape SHAPE_UP_WEST = Block.box(00.0D, 22.0D, 6.0D, 06.0D,  31.0D, 10.0D);
-    private static final VoxelShape SHAPE_UP_EAST = Block.box(10.0D, 22.0D, 6.0D, 16.0D,  31.0D, 10.0D);
-    private static final VoxelShape SHAPE_UP_NORTH = Block.box(6.0D, 22.0D, 00.0D, 10.0D,  31.0D, 06.0D);
-    private static final VoxelShape SHAPE_UP_SOUTH = Block.box(6.0D, 22.0D, 10.0D, 10.0D,  31.0D, 16.0D);
+    private static final VoxelShape SHAPE_UP_WEST = Block.box(00.0D, 15.0D, 6.0D, 06.0D,  24.0D, 10.0D);
+    private static final VoxelShape SHAPE_UP_EAST = Block.box(10.0D, 15.0D, 6.0D, 16.0D,  24.0D, 10.0D);
+    private static final VoxelShape SHAPE_UP_NORTH = Block.box(6.0D, 15.0D, 00.0D, 10.0D,  24.0D, 06.0D);
+    private static final VoxelShape SHAPE_UP_SOUTH = Block.box(6.0D, 15.0D, 10.0D, 10.0D,  24.0D, 16.0D);
+
+    // for collision we will add some more on the top
+    private static final VoxelShape SHAPE_UP_WEST_COLL = Block.box(00.0D, 15.0D, 6.0D, 06.0D,  31.0D, 10.0D);
+    private static final VoxelShape SHAPE_UP_EAST_COLL = Block.box(10.0D, 15.0D, 6.0D, 16.0D,  31.0D, 10.0D);
+    private static final VoxelShape SHAPE_UP_NORTH_COLL = Block.box(6.0D, 15.0D, 00.0D, 10.0D,  31.0D, 06.0D);
+    private static final VoxelShape SHAPE_UP_SOUTH_COLL = Block.box(6.0D, 15.0D, 10.0D, 10.0D,  31.0D, 16.0D);
+    private static final VoxelShape SHAPE_DN_WEST_COLL = Block.box(-2.0D, 08.0D, 6.0D, 06.0D,  25.0D, 10.0D);
+    private static final VoxelShape SHAPE_DN_EAST_COLL = Block.box(10.0D, 08.0D, 6.0D, 18.0D,  25.0D, 10.0D);
+    private static final VoxelShape SHAPE_DN_NORTH_COLL = Block.box(6.0D, 08.0D, -2.0D, 10.0D,  25.0D, 06.0D);
+    private static final VoxelShape SHAPE_DN_SOUTH_COLL = Block.box(6.0D, 08.0D, 10.0D, 10.0D,  25.0D, 18.0D);
+    private static final VoxelShape SHAPE_HOR_WEST_COLL = Block.box(00.0D, 14.0D, 6.0D, 06.0D,  31.0D, 10.0D);
+    private static final VoxelShape SHAPE_HOR_EAST_COLL = Block.box(10.0D, 14.0D, 6.0D, 16.0D,  31.0D, 10.0D);
+    private static final VoxelShape SHAPE_HOR_NORTH_COLL = Block.box(6.0D, 14.0D, 00.0D, 10.0D,  31.0D, 06.0D);
+    private static final VoxelShape SHAPE_HOR_SOUTH_COLL = Block.box(6.0D, 14.0D, 10.0D, 10.0D,  31.0D, 16.0D);
+    private static final VoxelShape SHAPE_POST_COLL = Block.box(6.0D, 8.0D, 6.0D, 10.0D, 31.0D, 10.0D);
+    private static final VoxelShape SHAPE_MAIN_COLL = Shapes.or(SHAPE_SLAB, SHAPE_POST_COLL);
 
     private static int getShapeIndex(BlockState blockState)
     {
@@ -68,6 +88,10 @@ public class FenceOnASlabBlock extends FenceBlock
         result += blockState.getValue(WEST_DOWN) ? 32 : 0;
         result += blockState.getValue(EAST_DOWN) ? 64 : 0;
         result += blockState.getValue(SOUTH_DOWN) ? 128 : 0;
+        result += blockState.getValue(NORTH_UP) ? 256 : 0;
+        result += blockState.getValue(WEST_UP) ? 512 : 0;
+        result += blockState.getValue(EAST_UP) ? 1024 : 0;
+        result += blockState.getValue(SOUTH_UP) ? 2048 : 0;
         return result;
     }
 
@@ -75,22 +99,38 @@ public class FenceOnASlabBlock extends FenceBlock
     {
         for (int i = 0; i < 16*16*16; i++)
         {
-            collisionShapes[i] = SHAPE_MAIN;
-            if ((i &    1) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_NORTH);
-            if ((i &    2) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_WEST);
-            if ((i &    4) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_EAST);
-            if ((i &    8) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_SOUTH);
-            if ((i &   16) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_NORTH);
-            if ((i &   32) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_WEST);
-            if ((i &   64) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_EAST);
-            if ((i &  128) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_SOUTH);
-            if ((i &  256) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_NORTH);
-            if ((i &  512) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_WEST);
-            if ((i & 1024) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_EAST);
-            if ((i & 2048) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_SOUTH);
+            interactionShapes[i] = SHAPE_MAIN;
+            if ((i &    1) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_HOR_NORTH);
+            if ((i &    2) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_HOR_WEST);
+            if ((i &    4) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_HOR_EAST);
+            if ((i &    8) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_HOR_SOUTH);
+            if ((i &   16) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_DN_NORTH);
+            if ((i &   32) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_DN_WEST);
+            if ((i &   64) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_DN_EAST);
+            if ((i &  128) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_DN_SOUTH);
+            if ((i &  256) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_UP_NORTH);
+            if ((i &  512) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_UP_WEST);
+            if ((i & 1024) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_UP_EAST);
+            if ((i & 2048) > 0) interactionShapes[i] = Shapes.or(interactionShapes[i], SHAPE_UP_SOUTH);
+        }
+        for (int i = 0; i < 16*16*16; i++)
+        {
+            collisionShapes[i] = SHAPE_MAIN_COLL;
+            if ((i &    1) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_NORTH_COLL);
+            if ((i &    2) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_WEST_COLL);
+            if ((i &    4) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_EAST_COLL);
+            if ((i &    8) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_HOR_SOUTH_COLL);
+            if ((i &   16) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_NORTH_COLL);
+            if ((i &   32) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_WEST_COLL);
+            if ((i &   64) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_EAST_COLL);
+            if ((i &  128) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_DN_SOUTH_COLL);
+            if ((i &  256) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_NORTH_COLL);
+            if ((i &  512) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_WEST_COLL);
+            if ((i & 1024) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_EAST_COLL);
+            if ((i & 2048) > 0) collisionShapes[i] = Shapes.or(collisionShapes[i], SHAPE_UP_SOUTH_COLL);
         }
     }
-    private static VoxelShape[] collisionShapes = null;
+    private static VoxelShape[] collisionShapes = null, interactionShapes = null;
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext)
@@ -203,6 +243,27 @@ public class FenceOnASlabBlock extends FenceBlock
         {
             level.setBlockAndUpdate(blockPos, state);
         }
+    }
+
+    ////////////////////////////////////
+
+    @Override
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult)
+    {
+        double y = blockHitResult.getLocation().y;
+        y = y - Math.floor(y);
+        if (y <= 0.5)
+        {
+            //slab right-clicked. pass result will probably result in a block being placed next to the slab.
+            return InteractionResult.PASS;
+        }
+        if (y > 1.0 && (blockHitResult.getLocation().x > 6/16d && blockHitResult.getLocation().x < 10/16d) && (blockHitResult.getLocation().z > 6/16d && blockHitResult.getLocation().z < 10/16d))
+        {
+            // top part right-clicked. let's have tech block handle it.
+            return level.getBlockState(blockPos.above()).use(level, player, interactionHand, blockHitResult.withPosition(blockPos.above()));
+        }
+        // middle or sides. no action at the moment.
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     ////////////////////////////////////
