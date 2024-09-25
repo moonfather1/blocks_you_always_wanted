@@ -31,7 +31,7 @@ public class TransformSignEvent
             return; // todo: don't register event on 1.21
         }
         BlockState state = event.getLevel().getBlockState(event.getHitVec().getBlockPos());
-        if (event.getItemStack() != ItemStack.EMPTY && state.getBlock() instanceof SignBlock original && event.getFace() != null && ! event.getFace().equals(Direction.DOWN) && ! event.getItemStack().is(Items.HONEYCOMB) && ! event.getItemStack().is(Constants.Tags.GC_WAX))
+        if (event.getItemStack() != ItemStack.EMPTY && state.getBlock() instanceof SignBlock original && event.getFace() != null && ! event.getFace().equals(Direction.DOWN) && ! event.getItemStack().is(Items.HONEYCOMB) && ! event.getItemStack().is(Constants.ItemTags.GC_WAX))
         {
             BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getHitVec().getBlockPos());
             if (blockEntity instanceof SignBlockEntity sbe && sbe.isWaxed())

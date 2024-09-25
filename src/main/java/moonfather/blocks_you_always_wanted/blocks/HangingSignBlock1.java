@@ -4,13 +4,10 @@ import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HangingSignItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
@@ -23,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -70,7 +66,7 @@ public class HangingSignBlock1 extends CeilingHangingSignBlock
                     level.setBlockAndUpdate(blockPos, newState);
                     newState.getBlock().use(newState, level, blockPos, player, hand, blockHitResult);
                 }
-                else if (signBlockEntity.getItem().isEmpty() || ! (player.getItemInHand(hand).is(Items.HONEYCOMB) || player.getItemInHand(hand).is(Constants.Tags.GC_WAX)))
+                else if (signBlockEntity.getItem().isEmpty() || ! (player.getItemInHand(hand).is(Items.HONEYCOMB) || player.getItemInHand(hand).is(Constants.ItemTags.GC_WAX)))
                 {
                     // change item
                     signBlockEntity.setItem(player.getItemInHand(hand));

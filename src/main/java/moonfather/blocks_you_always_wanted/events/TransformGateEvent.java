@@ -6,7 +6,6 @@ import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
@@ -23,7 +22,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;;
 
 @Mod.EventBusSubscriber
 public class TransformGateEvent
@@ -31,12 +29,16 @@ public class TransformGateEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
+        if (! (event.getItemStack().getItem() instanceof BlockItem bi))
+        {
+            return;
+        }
         BlockState state = event.getLevel().getBlockState(event.getHitVec().getBlockPos());
         if (event.getItemStack() != ItemStack.EMPTY
                 && event.getFace() != null && event.getFace().equals(Direction.UP)
                 && event.getItemStack().is(ItemTags.FENCE_GATES))
         {
-            if (! (event.getItemStack().getItem() instanceof BlockItem bi) || ! (bi.getBlock() instanceof GateBlock gate))
+            if (! (bi.getBlock() instanceof GateBlock gate))
             {
                 return;
             }
@@ -88,17 +90,7 @@ public class TransformGateEvent
                     return;
                 }
             }
-            ResourceLocation gateRL = ForgeRegistries.BLOCKS.getKey(gate);
-            if (gateRL == null)
-            {
-                return;
-            }
-            gateRL = new ResourceLocation(gateRL.getNamespace(), gateRL.getPath().replace("gate_main", "gate_spec"));
-            Block replacement = ForgeRegistries.BLOCKS.getValue(gateRL);
-            if (replacement == null)
-            {
-                return;
-            }
+            Block replacement = GateBlock.toRaisedGate(gate);
             if (slab != null && ! (slab.equals(Blocks.SMOOTH_STONE_SLAB)) && ! ((GateBlock_V2) replacement).slabMatches(slab))
             {
                 event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_SLAB_TYPE, true);
@@ -145,13 +137,50 @@ public class TransformGateEvent
                                                          .setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.POWERED_RAIL) ? GateBlock_V2.ON_POWERED_RAIL : GateBlock_V2.ON_REGULAR_RAIL);
                         event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), newState);
                         event.getLevel().playSound(event.getEntity(), event.getHitVec().getBlockPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, event.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
-                        if (!event.getEntity().isCreative())
+                        if (! event.getEntity().isCreative())
                         {
                             event.getItemStack().shrink(1);
                         }
                         event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
                         event.setCanceled(true);
                     }
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////
+        if (event.getItemStack().is(ItemTags.SLABS))
+        {
+            if (! event.getLevel().isClientSide && event.getFace() != null && event.getFace().equals(Direction.UP))
+            {
+                BlockState above = event.getLevel().getBlockState(event.getHitVec().getBlockPos().above());
+                BlockState newState = null;
+                if (above.getBlock() instanceof GateBlock gate)
+                {
+                    Block replacement = GateBlock.toRaisedGate(gate);
+                    newState = replacement.withPropertiesOf(above)
+                                          .setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.SMOOTH_STONE_SLAB) ? GateBlock_V2.ON_STONE_SLAB : GateBlock_V2.ON_WOODEN_SLAB);
+                }
+                if (above.getBlock() instanceof GateBlock_V2 gate2 && above.getValue(GateBlock_V2.BLOCK_BELOW).equals(0))
+                {
+                    newState = above.setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.SMOOTH_STONE_SLAB) ? GateBlock_V2.ON_STONE_SLAB : GateBlock_V2.ON_WOODEN_SLAB);
+                }
+                if (newState != null && ! bi.getBlock().equals(Blocks.SMOOTH_STONE_SLAB) && ! ((GateBlock_V2) newState.getBlock()).slabMatches(bi.getBlock()))
+                {
+                    event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_SLAB_TYPE, true);
+                    event.setCancellationResult(InteractionResult.FAIL);
+                    event.setCanceled(true);
+                    return;
+                }
+                if (newState != null)
+                {
+                    event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), newState);
+                    event.getLevel().playSound(event.getEntity(), event.getHitVec().getBlockPos(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, event.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
+                    if (! event.getEntity().isCreative())
+                    {
+                        event.getItemStack().shrink(1);
+                    }
+                    event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+                    event.setCanceled(true);
                 }
             }
         }

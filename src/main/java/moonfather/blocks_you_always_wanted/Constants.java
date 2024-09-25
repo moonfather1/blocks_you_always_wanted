@@ -5,15 +5,21 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Constants
 {
     public static final String MODID = "blocks_you_always_wanted";
 
-    public static class Tags
+    public static class ItemTags
     {
         public static final TagKey<Item> GC_WAX = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("growthcraft_apiary:bees_wax"));
+    }
+
+    public static class BlockTags
+    {
+        public static final TagKey<Block> ALLOWED_NEXT_TO_GATES = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), new ResourceLocation(MODID, "allowed_next_to_gates"));
     }
 
     public static class Messages

@@ -1,7 +1,9 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +27,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class FenceOnASlabBlock extends FenceBlock
@@ -135,7 +138,7 @@ public class FenceOnASlabBlock extends FenceBlock
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext)
     {
-        return collisionShapes[getShapeIndex(blockState)];
+        return interactionShapes[getShapeIndex(blockState)];
     }
 
     @Override
@@ -251,7 +254,7 @@ public class FenceOnASlabBlock extends FenceBlock
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult)
     {
         double y = blockHitResult.getLocation().y;
-        y = y - Math.floor(y);
+        y = y - blockPos.getY();
         if (y <= 0.5)
         {
             //slab right-clicked. pass result will probably result in a block being placed next to the slab.
@@ -285,4 +288,16 @@ public class FenceOnASlabBlock extends FenceBlock
     public static final BooleanProperty EAST_DOWN = BooleanProperty.create("east_dn");
     public static final BooleanProperty SOUTH_DOWN = BooleanProperty.create("south_dn");
     public static final BooleanProperty WEST_DOWN = BooleanProperty.create("west_dn");
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    public static FenceTechnicalBlock technical()
+    {
+        if (technicalBlockInstance == null)
+        {
+            technicalBlockInstance = (FenceTechnicalBlock) ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID, "fence_technical_block"));
+        }
+        return technicalBlockInstance;
+    }
+    private static FenceTechnicalBlock technicalBlockInstance = null;
 }

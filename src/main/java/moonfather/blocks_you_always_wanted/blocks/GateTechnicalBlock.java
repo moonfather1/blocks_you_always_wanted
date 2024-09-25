@@ -1,20 +1,15 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -22,11 +17,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,20 +27,16 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class GateTechnicalBlock extends HorizontalDirectionalBlock
 {
     public static final BooleanProperty IN_WALL = BlockStateProperties.IN_WALL;
     public static class ShapeSet
     {
         public static final VoxelShape EMPTY = Shapes.empty();
-        public static final VoxelShape Z_SHAPE = Block.box(-5.0D, -8.0D, 6.0D, 21.0D, 10.0D, 10.0D);
-        public static final VoxelShape X_SHAPE = Block.box(6.0D, -8.0D, -5.0D, 10.0D, 10.0D, 21.0D);
-        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, -6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
-        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, -6.0D, -4.0D, 10.0D, 10.0D, 20.0D);
-        public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 0.0D, 6.0D, 20.0D, 28.0D, 10.0D);
-        public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 0.0D, -4.0D, 10.0D, 28.0D, 20.0D);
+        public static final VoxelShape Z_SHAPE = Block.box(-5.0D, -8.0D, 6.0D, 21.0D, 11.0D, 10.0D);
+        public static final VoxelShape X_SHAPE = Block.box(6.0D, -8.0D, -5.0D, 10.0D, 11.0D, 21.0D);
+        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, -6.0D, 6.0D, 20.0D, 11.0D, 10.0D);  // 16+11, normal to 16+10, i don't feel like differentiating now.
+        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, -6.0D, -4.0D, 10.0D, 11.0D, 20.0D);
         public static final VoxelShape Z_SUPPORT_SHAPE = Z_SHAPE;
         public static final VoxelShape X_SUPPORT_SHAPE = X_SHAPE;
         public static final VoxelShape Z_OCCLUSION_SHAPE = Shapes.or(Block.box(-5.0D, 0.0D, 7.0D, -3.0D, 10.0D, 9.0D), Block.box(19.0D, 0.0D, 7.0D, 21.0D, 10.0D, 9.0D));
@@ -158,7 +147,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS))
+                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! other.getBlock().equals(FenceOnASlabBlock.technical()) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
                     {
                         level.destroyBlock(blockPos, true);
                     }

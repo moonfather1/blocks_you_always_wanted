@@ -3,20 +3,17 @@ package moonfather.blocks_you_always_wanted;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.function.Supplier;
 
 @Mod(Constants.MODID)
 public class BlocksMod
@@ -26,7 +23,7 @@ public class BlocksMod
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MainConfig.COMMON_SPEC);
 
-        //todo: collision
+        //+odo: collision
         //+odo: initial state
         //+odo: fence technical top, 3 states, 2 glow
         //+odo: detect side+up change
@@ -42,7 +39,7 @@ public class BlocksMod
         //+odo: message color
         //no:   gates
         //+odo: redstone signal
-        //todo: add fake collision above so that i can't jump over
+        //+odo: add fake collision above so that i can't jump over
         //+odo: connect to solid posts
 
         //+odo: gate: inventory
@@ -64,9 +61,8 @@ public class BlocksMod
         //+odo: craft gate msg in craft gui and on place
         //+odo: gate technical. has facing and just that. split interaction shape. test for "Rejecting UseItemOnPacket"
         //+odo: try carry on, try packing tape.
-
         RegistrationManager.init(modEventBus);
-//        modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::commonSetup);
     }
 
@@ -75,10 +71,14 @@ public class BlocksMod
         CraftingHelper.register(new OptionalRecipeCondition.Serializer(new ResourceLocation(Constants.MODID, "optional")));;
     }
 
-//    // Add the example block item to the building blocks tab
-//    private void addCreative(BuildCreativeModeTabContentsEvent event)
-//    {
-//        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-//        { }    //event.accept(EXAMPLE_BLOCK_ITEM);
-//    }
+    private void addCreative(BuildCreativeModeTabContentsEvent event)
+    {
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
+        {
+            for (Supplier<Item> item : RegistrationManager.itemsForCreativeTabs)
+            {
+                event.accept(item);
+            }
+        }
+    }
 }

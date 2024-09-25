@@ -66,7 +66,7 @@ public class HangingSignBlock2 extends WallHangingSignBlock
                     level.setBlockAndUpdate(blockPos, newState);
                     newState.getBlock().use(newState, level, blockPos, player, hand, blockHitResult);
                 }
-                else if (signBlockEntity.getItem().isEmpty() || ! (player.getItemInHand(hand).is(Items.HONEYCOMB) || player.getItemInHand(hand).is(Constants.Tags.GC_WAX)))
+                else if (signBlockEntity.getItem().isEmpty() || ! (player.getItemInHand(hand).is(Items.HONEYCOMB) || player.getItemInHand(hand).is(Constants.ItemTags.GC_WAX)))
                 {
                     // change item
                     signBlockEntity.setItem(player.getItemInHand(hand));

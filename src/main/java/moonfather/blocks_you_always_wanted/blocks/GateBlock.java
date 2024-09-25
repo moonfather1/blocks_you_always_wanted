@@ -1,5 +1,6 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
@@ -46,9 +48,9 @@ public class GateBlock extends HorizontalDirectionalBlock
         public static final VoxelShape Z_SHAPE = Block.box(-5.0D, 3.0D, 6.0D, 21.0D, 26.0D, 10.0D);
         public static final VoxelShape X_SHAPE = Block.box(6.0D, 3.0D, -5.0D, 10.0D, 26.0D, 21.0D);
         public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, 3.0D, 6.0D, 20.0D, 26.0D, 10.0D);
-        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 3.0D, -4.0D, 10.0D, 26.0D, 20.0D);//26->25
-        public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 2.0D, 6.0D, 20.0D, 28.0D, 10.0D);
-        public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 2.0D, -4.0D, 10.0D, 28.0D, 20.0D);
+        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 3.0D, -4.0D, 10.0D, 26.0D, 20.0D);
+        public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 2.0D, 6.0D, 20.0D, 31.5D, 10.0D);
+        public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 2.0D, -4.0D, 10.0D, 31.5D, 20.0D);
         public static final VoxelShape Z_SUPPORT_SHAPE = EMPTY;
         public static final VoxelShape X_SUPPORT_SHAPE = EMPTY;
         public static final VoxelShape Z_OCCLUSION_SHAPE = Shapes.or(Block.box(-5.0D, 3.0D, 7.0D, -3.0D, 16.0D, 9.0D), Block.box(19.0D, 3.0D, 7.0D, 21.0D, 16.0D, 9.0D));
@@ -228,8 +230,16 @@ public class GateBlock extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS))
+                    if ((other.is(BlockTags.SLABS) && other.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM))
+                        || other.getBlock() instanceof FenceOnASlabBlock)
                     {
+                        // allow lower slabs
+                        blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState);
+                        level.setBlock(blockPos, blockState, 11);
+                    }
+                    else if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
+                    {
+                        // destroy gate if block not supported
                         level.destroyBlock(blockPos, true);
                     }
                 }
@@ -247,6 +257,28 @@ public class GateBlock extends HorizontalDirectionalBlock
         super.onPlace(blockState, level, blockPos, p_60569_, p_60570_);
         BlockState pt2 = RegistrationManager.GATE_TECHNICAL.get().withPropertiesOf(blockState);
         level.setBlockAndUpdate(blockPos.above(), pt2);
+        this.checkForSlabs(blockState, level, blockPos);
+    }
+
+
+    private void checkForSlabs(BlockState blockState, Level level, BlockPos blockPos)
+    {
+        if (level.isClientSide())
+        {
+            return;
+        }
+        BlockPos otherPos = blockPos.relative(blockState.getValue(FACING).getClockWise());
+        BlockState other = level.getBlockState(otherPos);
+        if (other.is(BlockTags.SLABS) || other.getBlock() instanceof FenceOnASlabBlock)
+        {
+            this.neighborChanged(blockState, level, blockPos, other.getBlock(), otherPos, true);
+        }
+        otherPos = blockPos.relative(blockState.getValue(FACING).getCounterClockWise());
+        other = level.getBlockState(otherPos);
+        if (other.is(BlockTags.SLABS) || other.getBlock() instanceof FenceOnASlabBlock)
+        {
+            this.neighborChanged(blockState, level, blockPos, other.getBlock(), otherPos, true);
+        }
     }
 
 

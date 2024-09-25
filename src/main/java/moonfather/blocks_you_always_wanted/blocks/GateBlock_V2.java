@@ -1,5 +1,6 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
@@ -18,12 +19,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -50,8 +49,12 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         public static final VoxelShape X_SHAPE = Block.box(6.0D, 9.0D, -5.0D, 10.0D, 27.0D, 21.0D);
         public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, 9.0D, 6.0D, 20.0D, 27.0D, 10.0D);
         public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 9.0D, -4.0D, 10.0D, 27.0D, 20.0D);
-        public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 0.0D, 6.0D, 20.0D, 28.0D, 10.0D);
-        public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 0.0D, -4.0D, 10.0D, 28.0D, 20.0D);
+        public static final VoxelShape Z_SHAPE_PLUS_SLAB = Shapes.or(Z_SHAPE, JUST_SLAB);
+        public static final VoxelShape X_SHAPE_PLUS_SLAB = Shapes.or(X_SHAPE, JUST_SLAB);
+        public static final VoxelShape Z_SHAPE_NARROW_PLUS_SLAB = Shapes.or(Z_SHAPE_NARROW, JUST_SLAB);
+        public static final VoxelShape X_SHAPE_NARROW_PLUS_SLAB = Shapes.or(X_SHAPE_NARROW, JUST_SLAB);
+        public static final VoxelShape Z_COLLISION_SHAPE = Block.box(-4.0D, 0.0D, 6.0D, 20.0D, 31.5D, 10.0D);
+        public static final VoxelShape X_COLLISION_SHAPE = Block.box(6.0D, 0.0D, -4.0D, 10.0D, 31.5D, 20.0D);
         public static final VoxelShape Z_COLLISION_SHAPE_SLAB = Shapes.or(Z_COLLISION_SHAPE, JUST_SLAB);
         public static final VoxelShape X_COLLISION_SHAPE_SLAB = Shapes.or(X_COLLISION_SHAPE, JUST_SLAB);
         public static final VoxelShape Z_COLLISION_SHAPE_RAIL = Shapes.or(Z_COLLISION_SHAPE, EMPTY);
@@ -84,11 +87,21 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public VoxelShape getShape(BlockState p_53391_, BlockGetter p_53392_, BlockPos p_53393_, CollisionContext p_53394_) {
-        if (p_53391_.getValue(IN_WALL)) {
-            return p_53391_.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE_NARROW : ShapeSet.Z_SHAPE_NARROW;
-        } else {
-            return p_53391_.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE : ShapeSet.Z_SHAPE;
+    public VoxelShape getShape(BlockState blockState, BlockGetter p_53392_, BlockPos p_53393_, CollisionContext p_53394_)
+    {
+        if (blockState.getValue(BLOCK_BELOW) == ON_STONE_SLAB || blockState.getValue(BLOCK_BELOW) == ON_WOODEN_SLAB)
+        {
+            if (blockState.getValue(IN_WALL))
+                return blockState.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE_NARROW_PLUS_SLAB : ShapeSet.Z_SHAPE_NARROW_PLUS_SLAB;
+            else
+                return blockState.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE_PLUS_SLAB : ShapeSet.Z_SHAPE_PLUS_SLAB;
+        }
+        else
+        {
+            if (blockState.getValue(IN_WALL))
+                return blockState.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE_NARROW : ShapeSet.Z_SHAPE_NARROW;
+            else
+                return blockState.getValue(FACING).getAxis() == Direction.Axis.X ? ShapeSet.X_SHAPE : ShapeSet.Z_SHAPE;
         }
     }
 
@@ -172,6 +185,13 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
     {
+        double y = blockHitResult.getLocation().y;
+        y = y - blockPos.getY();
+        if (y <= 0.5 && ((blockState.getValue(BLOCK_BELOW) == ON_STONE_SLAB || blockState.getValue(BLOCK_BELOW) == ON_WOODEN_SLAB)))
+        {
+            //slab right-clicked. pass result will probably result in a block being placed next to the slab.
+            return InteractionResult.PASS;
+        }
         if (blockState.getValue(OPEN))
         {
             blockState = blockState.setValue(OPEN, Boolean.FALSE);
@@ -239,7 +259,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS))
+                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! (other.is(BlockTags.SLABS) && other.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM)) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
                     {
                         level.destroyBlock(blockPos, true);
                     }
