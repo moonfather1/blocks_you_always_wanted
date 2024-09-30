@@ -4,7 +4,6 @@ import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -15,12 +14,12 @@ import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class TransformSignEvent
 {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -43,25 +42,16 @@ public class TransformSignEvent
             if (! event.getLevel().isClientSide)
             {
                 BlockState newState;
-                if (original instanceof CeilingHangingSignBlock)
+                if (original instanceof CeilingHangingSignBlock || original instanceof WallHangingSignBlock)
                 {
-                    newState = replacement.defaultBlockState()
-                                          .setValue(CeilingHangingSignBlock.ROTATION, state.getValue(CeilingHangingSignBlock.ROTATION))
-                                          .setValue(CeilingHangingSignBlock.ATTACHED, state.getValue(CeilingHangingSignBlock.ATTACHED))
-                                          .setValue(CeilingHangingSignBlock.WATERLOGGED, state.getValue(CeilingHangingSignBlock.WATERLOGGED));
-                }
-                else if (original instanceof WallHangingSignBlock)
-                {
-                    newState = replacement.defaultBlockState()
-                                          .setValue(WallHangingSignBlock.FACING, state.getValue(WallHangingSignBlock.FACING))
-                                          .setValue(WallHangingSignBlock.WATERLOGGED, state.getValue(WallHangingSignBlock.WATERLOGGED));
+                    newState = replacement.withPropertiesOf(state);
                 }
                 else
                 {
                     return;
                 }
                 event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos(), newState);
-                replacement.use(newState, event.getLevel(), event.getHitVec().getBlockPos(), event.getEntity(), InteractionHand.MAIN_HAND, event.getHitVec());
+                newState.useItemOn(event.getItemStack(), event.getLevel(), event.getEntity(), event.getHand(), event.getHitVec());
             }
             event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
             event.setCanceled(true);

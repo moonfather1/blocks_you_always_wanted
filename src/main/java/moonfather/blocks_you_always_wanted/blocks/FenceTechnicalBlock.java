@@ -8,12 +8,14 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -29,7 +31,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -89,8 +91,10 @@ public class FenceTechnicalBlock extends Block
 
     /////////////////////////////////////////////////////
 
+
+
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         ItemStack result = stateToItem(state.getValue(TOP_VARIANT));
         if (! result.isEmpty())
@@ -240,34 +244,34 @@ public class FenceTechnicalBlock extends Block
 
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         int variant = blockState.getValue(TOP_VARIANT);
         if (variant != 0)
         {
-            return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+            return super.useItemOn(stack, blockState, level, blockPos, player, hand, hitResult);
         }
-        if (player.getItemInHand(interactionHand).is(Items.TORCH)) variant = 1;
-        else if (player.getItemInHand(interactionHand).is(Items.LANTERN)) variant = 2;
-        else if (player.getItemInHand(interactionHand).is(Items.SOUL_LANTERN)) variant = 3;
-        else if (player.getItemInHand(interactionHand).is(Items.REDSTONE_TORCH)) variant = 4;
-        else if (player.getItemInHand(interactionHand).is(Items.SOUL_TORCH)) variant = 5;
+        if (stack.is(Items.TORCH)) variant = 1;
+        else if (stack.is(Items.LANTERN)) variant = 2;
+        else if (stack.is(Items.SOUL_LANTERN)) variant = 3;
+        else if (stack.is(Items.REDSTONE_TORCH)) variant = 4;
+        else if (stack.is(Items.SOUL_TORCH)) variant = 5;
         if (variant == 0) // new variant
         {
-            return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+            return super.useItemOn(stack, blockState, level, blockPos, player, hand, hitResult);
         }
         if (! player.isCreative())
         {
-            player.getItemInHand(interactionHand).shrink(1);
+            stack.shrink(1);
         }
         if (! level.isClientSide())
         {
             level.setBlockAndUpdate(blockPos, blockState.setValue(TOP_VARIANT, variant));
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         }
         else
         {
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
     }
 

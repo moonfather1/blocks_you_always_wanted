@@ -1,12 +1,12 @@
 package moonfather.blocks_you_always_wanted;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class Constants
 {
@@ -14,12 +14,12 @@ public class Constants
 
     public static class ItemTags
     {
-        public static final TagKey<Item> GC_WAX = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("growthcraft_apiary:bees_wax"));
+        public static final TagKey<Item> GC_WAX = TagKey.create(Registries.ITEM, ResourceLocation.parse("growthcraft_apiary:bees_wax"));
     }
 
     public static class BlockTags
     {
-        public static final TagKey<Block> ALLOWED_NEXT_TO_GATES = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), new ResourceLocation(MODID, "allowed_next_to_gates"));
+        public static final TagKey<Block> ALLOWED_NEXT_TO_GATES = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(MODID, "allowed_next_to_gates"));
     }
 
     public static class Messages

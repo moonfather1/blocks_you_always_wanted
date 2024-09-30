@@ -1,26 +1,20 @@
 package moonfather.blocks_you_always_wanted;
 
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 public class OptionalRecipeCondition implements ICondition
 {
 	private final String flagCode;
-	private final ResourceLocation conditionId;
 
-	private OptionalRecipeCondition(ResourceLocation id, String value)
+	private OptionalRecipeCondition(String value)
 	{
-		this.conditionId = id;
 		this.flagCode = value;
 	}
 
-	@Override
-	public ResourceLocation getID()
-	{
-		return this.conditionId;
-	}
+
 
 	@Override
 	public boolean test(IContext context)
@@ -45,31 +39,15 @@ public class OptionalRecipeCondition implements ICondition
 
 	/////////////////////////////////////////////////////
 
-	public static class Serializer implements IConditionSerializer<OptionalRecipeCondition>
+	@Override
+	public MapCodec<? extends ICondition> codec()
 	{
-		private final ResourceLocation conditionId;
-
-		public Serializer(ResourceLocation id)
-		{
-			this.conditionId = id;
-		}
-
-		@Override
-		public void write(JsonObject json, OptionalRecipeCondition condition)
-		{
-			json.addProperty("flag_code", condition.flagCode);
-		}
-
-		@Override
-		public OptionalRecipeCondition read(JsonObject json)
-		{
-			return new OptionalRecipeCondition(this.conditionId, json.getAsJsonPrimitive("flag_code").getAsString());
-		}
-
-		@Override
-		public ResourceLocation getID()
-		{
-			return this.conditionId;
-		}
+		return CODEC;
 	}
+
+	public static MapCodec<OptionalRecipeCondition> CODEC = RecordCodecBuilder.mapCodec(
+			builder -> builder
+					.group(
+							Codec.STRING.fieldOf("flag_code").forGetter(orc -> orc.flagCode))
+					.apply(builder, OptionalRecipeCondition::new));
 }

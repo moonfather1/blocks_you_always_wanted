@@ -15,12 +15,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class TransformFenceEvent
 {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -60,7 +60,7 @@ public class TransformFenceEvent
                 boolean aboveIsWater = event.getLevel().getFluidState(above).isSourceOfType(Fluids.WATER);
                 event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos(), newState);
                 event.getLevel().setBlockAndUpdate(above, RegistrationManager.FENCE_TECHNICAL.get().defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, aboveIsWater));
-                replacement.use(newState, event.getLevel(), event.getHitVec().getBlockPos(), event.getEntity(), InteractionHand.MAIN_HAND, event.getHitVec());
+                //todo: why did i have this? newState.use(newState, event.getLevel(), event.getHitVec().getBlockPos(), event.getEntity(), InteractionHand.MAIN_HAND, event.getHitVec());
             }
             if (! event.getEntity().isCreative())
             {

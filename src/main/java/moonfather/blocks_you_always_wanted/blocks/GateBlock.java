@@ -1,9 +1,12 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -11,9 +14,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -33,8 +38,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class GateBlock extends HorizontalDirectionalBlock
 {
@@ -63,14 +69,14 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     public GateBlock(Block original, WoodType woodType)
     {
-        this(Properties.copy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose());
+        this(Properties.ofFullCopy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose());
     }
 
     public GateBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound)
     {
         super(properties);
-        this.openSound = openSound;
-        this.closeSound = closeSound;
+        this.openSound = openSound != null ? openSound : WoodType.OAK.fenceGateOpen();
+        this.closeSound = closeSound != null ? closeSound : WoodType.OAK.fenceGateClose();
         this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.FALSE).setValue(POWERED, Boolean.FALSE).setValue(IN_WALL, Boolean.FALSE));
     }
 
@@ -118,7 +124,7 @@ public class GateBlock extends HorizontalDirectionalBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_53360_, BlockGetter p_53361_, BlockPos p_53362_, PathComputationType p_53363_) {
+    public boolean isPathfindable(BlockState p_53360_, PathComputationType p_53363_) {
         switch (p_53363_) {
             case LAND:
                 return p_53360_.getValue(OPEN);
@@ -150,10 +156,8 @@ public class GateBlock extends HorizontalDirectionalBlock
         return other.is(BlockTags.WALLS);
     }
 
-
-
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         // normal gate to raised gate conversion.
         if (hand.equals(InteractionHand.MAIN_HAND) && (player.getMainHandItem().is(Items.RAIL) || player.getMainHandItem().is(Items.POWERED_RAIL)))
@@ -161,7 +165,7 @@ public class GateBlock extends HorizontalDirectionalBlock
             BlockPos below = blockPos.below();
             if (! level.getBlockState(below).isFaceSturdy(level, below, Direction.UP))
             {
-                return InteractionResult.FAIL;
+                return ItemInteractionResult.FAIL;
             }
             blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState).setValue(GateBlock_V2.BLOCK_BELOW, GateBlock.railToStateIndex(player.getMainHandItem().getItem()));
             level.setBlock(blockPos, blockState, 11);
@@ -170,9 +174,14 @@ public class GateBlock extends HorizontalDirectionalBlock
             {
                 player.getMainHandItem().shrink(1);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        //System.out.println("~~~cli==" + level.isClientSide + ",  dist==" + player.position().distanceTo(blockPos.getCenter()));
+        return super.useItemOn(stack, blockState, level, blockPos, player, hand, hitResult);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult hitResult)
+    {
         // open and close
         if (blockState.getValue(OPEN))
         {
@@ -198,7 +207,7 @@ public class GateBlock extends HorizontalDirectionalBlock
 
 
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_53377_)
+    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean movedByPiston)
     {
         if (! level.isClientSide)
         {
@@ -245,7 +254,7 @@ public class GateBlock extends HorizontalDirectionalBlock
                 }
             }
             // walls. not trivial so moving to a separate method.
-            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, p_53377_);
+            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, movedByPiston);
         }
     }
 
@@ -337,16 +346,16 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     public static Block toRaisedGate(Block normalGate)
     {
-        ResourceLocation gateRL = ForgeRegistries.BLOCKS.getKey(normalGate);
-        gateRL = new ResourceLocation(gateRL.getNamespace(), gateRL.getPath().replace("gate_main", "gate_spec"));
-        return ForgeRegistries.BLOCKS.getValue(gateRL);
+        ResourceLocation gateRL = BuiltInRegistries.BLOCK.getKey(normalGate);
+        gateRL = ResourceLocation.fromNamespaceAndPath(gateRL.getNamespace(), gateRL.getPath().replace("gate_main", "gate_spec"));
+        return BuiltInRegistries.BLOCK.get(gateRL);
     }
 
     public static Block fromRaisedGate(Block raisedGate)
     {
-        ResourceLocation gateRL = ForgeRegistries.BLOCKS.getKey(raisedGate);
-        gateRL = new ResourceLocation(gateRL.getNamespace(), gateRL.getPath().replace("gate_spec", "gate_main"));
-        return ForgeRegistries.BLOCKS.getValue(gateRL);
+        ResourceLocation gateRL = BuiltInRegistries.BLOCK.getKey(raisedGate);
+        gateRL = ResourceLocation.fromNamespaceAndPath(gateRL.getNamespace(), gateRL.getPath().replace("gate_spec", "gate_main"));
+        return BuiltInRegistries.BLOCK.get(gateRL);
     }
 
     public static int railToStateIndex(Item rail)
@@ -369,4 +378,15 @@ public class GateBlock extends HorizontalDirectionalBlock
         if (block1 != null) return blockToStateIndex(block1);
         return blockToStateIndex(block2);
     }
+
+    /////////////////////////////////////////////////////
+
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }
+    private static final MapCodec<GateBlock> CODEC = RecordCodecBuilder.mapCodec((p_308823_) -> {
+        return p_308823_.group(
+            propertiesCodec(),
+            SoundEvent.DIRECT_CODEC.optionalFieldOf("openSound").forGetter((gate) -> Optional.of(gate.openSound)),
+            SoundEvent.DIRECT_CODEC.optionalFieldOf("closeSound").forGetter((gate) -> Optional.of(gate.closeSound))
+        ).apply(p_308823_, (prop, sound1, sound2) -> new GateBlock(prop, sound1.orElse(null), sound2.orElse(null)));
+    });
 }

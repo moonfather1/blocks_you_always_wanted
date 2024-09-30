@@ -1,13 +1,19 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +22,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -35,6 +42,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class GateBlock_V2 extends HorizontalDirectionalBlock
 {
@@ -72,7 +80,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
 
     public GateBlock_V2(Block original, Block slab, WoodType woodType)
     {
-        this(Properties.copy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose(), slab);
+        this(Properties.ofFullCopy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose(), slab);
     }
 
     public GateBlock_V2(Properties properties, SoundEvent openSound, SoundEvent closeSound, Block slab)
@@ -82,6 +90,11 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         this.closeSound = closeSound;
         this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.FALSE).setValue(POWERED, Boolean.FALSE).setValue(IN_WALL, Boolean.FALSE));
         this.matchingSlab = slab;
+    }
+
+    public GateBlock_V2(Properties properties, SoundEvent openSound, SoundEvent closeSound, String slabId)
+    {
+        this(properties, openSound, closeSound, BuiltInRegistries.BLOCK.get(ResourceLocation.parse(slabId)));
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -152,7 +165,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_53360_, BlockGetter p_53361_, BlockPos p_53362_, PathComputationType p_53363_) {
+    public boolean isPathfindable(BlockState p_53360_, PathComputationType p_53363_) {
         switch (p_53363_) {
             case LAND:
                 return p_53360_.getValue(OPEN);
@@ -182,16 +195,26 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         return other.is(BlockTags.WALLS);
     }
 
+
+
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        double y = blockHitResult.getLocation().y;
+        double y = hitResult.getLocation().y;
         y = y - blockPos.getY();
         if (y <= 0.5 && ((blockState.getValue(BLOCK_BELOW) == ON_STONE_SLAB || blockState.getValue(BLOCK_BELOW) == ON_WOODEN_SLAB)))
         {
             //slab right-clicked. pass result will probably result in a block being placed next to the slab.
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
+
+
+        return super.useItemOn(stack, blockState, level, blockPos, player, hand, hitResult);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult hitResult)
+    {
         if (blockState.getValue(OPEN))
         {
             blockState = blockState.setValue(OPEN, Boolean.FALSE);
@@ -213,8 +236,10 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
+
+
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_53377_)
+    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean movedByPiston)
     {
         if (! level.isClientSide)
         {
@@ -266,7 +291,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
                 }
             }
             // walls. not trivial so moving to a separate method.
-            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, p_53377_);
+            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, movedByPiston);
         }
     }
 
@@ -345,9 +370,21 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state)
     {
         return GateBlock.fromRaisedGate(state.getBlock()).asItem().getDefaultInstance();
     }
 
+    /////////////////////////////////////////////////////
+
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }
+    private static final MapCodec<GateBlock_V2> CODEC = RecordCodecBuilder.mapCodec((p_308823_) -> {
+        return p_308823_.group(
+                propertiesCodec(),
+                SoundEvent.DIRECT_CODEC.optionalFieldOf("openSound").forGetter((gate) -> Optional.of(gate.openSound)),
+                SoundEvent.DIRECT_CODEC.optionalFieldOf("closeSound").forGetter((gate) -> Optional.of(gate.closeSound)),
+                Codec.STRING.fieldOf("slabId").forGetter(gate -> gate.slabId)
+        ).apply(p_308823_, (prop, sound1, sound2, slabId) -> new GateBlock_V2(prop, sound1.orElse(null), sound2.orElse(null), slabId));
+    });
+    private String slabId = "minecraft:acacia_slab";
 }

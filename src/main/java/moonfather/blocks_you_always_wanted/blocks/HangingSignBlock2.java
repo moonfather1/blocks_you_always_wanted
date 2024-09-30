@@ -6,12 +6,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,11 +31,11 @@ public class HangingSignBlock2 extends WallHangingSignBlock
 {
     public HangingSignBlock2(SignBlock originalBlock)
     {
-        super(properties().mapColor(originalBlock.defaultMapColor()), originalBlock.type());
+        super(originalBlock.type(), defaultProperties().mapColor(originalBlock.defaultMapColor()));
         this.originalBlock = originalBlock;
     }
 
-    private static Properties properties()
+    private static Properties defaultProperties()
     {
         return Properties.of().forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0F).ignitedByLava();
     }
@@ -42,31 +45,25 @@ public class HangingSignBlock2 extends WallHangingSignBlock
     ////// use ////////////////////////
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
+    protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         if (level.getBlockEntity(blockPos) instanceof ShopSignBlockEntity signBlockEntity)
         {
-            ItemStack itemstack = player.getItemInHand(hand);
-            if (this.shouldTryToChainAnotherHangingSign2(player, blockHitResult, itemstack))
+            if (this.shouldTryToChainAnotherHangingSign2(player, hitResult, itemStack))
             {
-                return super.use(state, level, blockPos, player, hand, blockHitResult);
+                return super.useItemOn(itemStack, state, level, blockPos, player, hand, hitResult);
             }
             if (hand.equals(InteractionHand.MAIN_HAND))
             {
                 if (signBlockEntity.isWaxed())
                 {
-                    return InteractionResult.FAIL;
+                    return ItemInteractionResult.FAIL;
                 }
-                if (signBlockEntity.getItem().isEmpty() && player.getItemInHand(hand).isEmpty())
+                if (signBlockEntity.getItem().isEmpty() && itemStack.isEmpty())
                 {
-                    // revert
-                    BlockState newState = this.originalBlock.defaultBlockState()
-                                                            .setValue(WallHangingSignBlock.FACING, state.getValue(WallHangingSignBlock.FACING))
-                                                            .setValue(WallHangingSignBlock.WATERLOGGED, state.getValue(WallHangingSignBlock.WATERLOGGED));
-                    level.setBlockAndUpdate(blockPos, newState);
-                    newState.getBlock().use(newState, level, blockPos, player, hand, blockHitResult);
+                    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;  // allows UseWithoutItem method
                 }
-                else if (signBlockEntity.getItem().isEmpty() || ! (player.getItemInHand(hand).is(Items.HONEYCOMB) || player.getItemInHand(hand).is(Constants.ItemTags.GC_WAX)))
+                if (signBlockEntity.getItem().isEmpty() || ! (player.getItemInHand(hand).is(Items.HONEYCOMB) || player.getItemInHand(hand).is(Constants.ItemTags.GC_WAX)))
                 {
                     // change item
                     signBlockEntity.setItem(player.getItemInHand(hand));
@@ -78,11 +75,35 @@ public class HangingSignBlock2 extends WallHangingSignBlock
                     level.levelEvent(player, 3003, blockPos, 0);
                     player.getItemInHand(hand).shrink(1);
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return ItemInteractionResult.sidedSuccess(level.isClientSide());
             }
         }
         // shouldn't be here
-        return super.use(state, level, blockPos, player, hand, blockHitResult);
+        return super.useItemOn(itemStack, state, level, blockPos, player, hand, hitResult);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos blockPos, Player player, BlockHitResult hitResult)
+    {
+
+        if (level.getBlockEntity(blockPos) instanceof ShopSignBlockEntity signBlockEntity)
+        {
+            if (signBlockEntity.getItem().isEmpty())
+            {
+                // revert
+                BlockState newState = this.originalBlock.withPropertiesOf(state);
+                level.setBlockAndUpdate(blockPos, newState);
+                newState.useWithoutItem(level, player, hitResult);
+            }
+            else
+            {
+                // change item
+                signBlockEntity.setItem(ItemStack.EMPTY);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+        // shouldn't be here
+        return super.useWithoutItem(state, level, blockPos, player, hitResult);
     }
 
     private boolean shouldTryToChainAnotherHangingSign2(Player player, BlockHitResult blockHitResult, ItemStack itemStack)
@@ -92,8 +113,9 @@ public class HangingSignBlock2 extends WallHangingSignBlock
 
     ////////////////////////////////////////////////
 
+
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         return this.originalBlock.getCloneItemStack(state, target, level, pos, player);
     }

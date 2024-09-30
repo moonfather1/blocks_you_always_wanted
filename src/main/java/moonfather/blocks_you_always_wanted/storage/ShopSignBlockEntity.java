@@ -2,6 +2,8 @@ package moonfather.blocks_you_always_wanted.storage;
 
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -24,24 +26,31 @@ public class ShopSignBlockEntity extends BlockEntity
     //////////////////////////////////////////////////
 
     @Override
-    public void load(CompoundTag mainTag)
+    protected void loadAdditional(CompoundTag mainTag, HolderLookup.Provider registries)
     {
-        super.load(mainTag);
+        super.loadAdditional(mainTag, registries);
         CompoundTag itemTag = mainTag.getCompound("item1");
-        this.item = ItemStack.of(itemTag);
+        this.item = ItemStack.parseOptional(registries, itemTag);
         this.waxed = mainTag.getBoolean("isWaxed");
     }
 
     @Override
-    protected void saveAdditional(CompoundTag mainTag)
+    protected void saveAdditional(CompoundTag mainTag, HolderLookup.Provider registries)
     {
-        super.saveAdditional(mainTag);
-        this.saveInternal(mainTag);
+        super.saveAdditional(mainTag, registries);
+        this.saveInternal(mainTag, registries);
     }
 
-    private CompoundTag saveInternal(CompoundTag compoundTag)
+    private CompoundTag saveInternal(CompoundTag compoundTag, HolderLookup.Provider registries)
     {
-        compoundTag.put("item1", this.item.save(new CompoundTag()));
+        if (! this.item.isEmpty())
+        {
+            compoundTag.put("item1", this.item.save(registries));
+        }
+        else
+        {
+            compoundTag.remove("item1");
+        }
         compoundTag.putBoolean("isWaxed", this.waxed);
         return compoundTag;
     }
@@ -49,9 +58,9 @@ public class ShopSignBlockEntity extends BlockEntity
     ///////////////////////
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries)
     {
-        return this.saveInternal(new CompoundTag()); //send to client
+        return this.saveInternal(new CompoundTag(), registries); //send to client
     }
 
     @Nullable
@@ -64,21 +73,6 @@ public class ShopSignBlockEntity extends BlockEntity
 
     ///////////////////////////////////////////
 
-    @Override
-    public net.minecraft.world.phys.AABB getRenderBoundingBox()
-    {
-        if (this.renderBox == null || ! this.getBlockPos().equals(this.lastPos))
-        {
-            this.renderBox = new net.minecraft.world.phys.AABB(this.getBlockPos(), this.getBlockPos().offset(1, 1, 1));
-            this.lastPos = this.getBlockPos();
-        }
-        return renderBox;
-    }
-    private net.minecraft.world.phys.AABB renderBox = null;
-    private BlockPos lastPos = null;
-
-    ///////////////////////////////////////////
-
     public ItemStack getItem()
     {
         return this.item;
@@ -87,9 +81,9 @@ public class ShopSignBlockEntity extends BlockEntity
     public void setItem(ItemStack itemStack)
     {
         this.item = itemStack.copy();
-        if (this.item.hasTag() && this.item.getTag().contains("Enchantments"))
+        if (this.item.has(DataComponents.ENCHANTMENTS))
         {
-            this.item.getTag().remove("Enchantments");
+            this.item.remove(DataComponents.ENCHANTMENTS);
         }
         this.setChanged();
     }

@@ -13,22 +13,20 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class OtherEvents
 {
     @SubscribeEvent
@@ -124,7 +122,7 @@ public class OtherEvents
             {
                 return; // allow these. will break gate if we're not happy later.
             }
-            if (bi.getBlock() instanceof TorchBlock) // todo: tag
+            if (bi.getBlock().defaultBlockState().is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
             {
                 return; // allow these. still testing.
             }
@@ -136,28 +134,28 @@ public class OtherEvents
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.SOUTH);
             if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.EAST) || adjacent.getValue(GateBlock.FACING).equals(Direction.WEST)))
             {
-                event.setUseItem(Event.Result.DENY);
+                event.setUseItem(TriState.FALSE);
                 return;
             }
             adjacent = event.getLevel().getBlockState(temp.move(Direction.WEST));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.EAST);
             if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.NORTH) || adjacent.getValue(GateBlock.FACING).equals(Direction.SOUTH)))
             {
-                event.setUseItem(Event.Result.DENY);
+                event.setUseItem(TriState.FALSE);
                 return;
             }
             adjacent = event.getLevel().getBlockState(temp.move(Direction.EAST));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.WEST);
             if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.NORTH) || adjacent.getValue(GateBlock.FACING).equals(Direction.SOUTH)))
             {
-                event.setUseItem(Event.Result.DENY);
+                event.setUseItem(TriState.FALSE);
                 return;
             }
             adjacent = event.getLevel().getBlockState(temp.move(Direction.SOUTH));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.NORTH);
             if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.EAST) || adjacent.getValue(GateBlock.FACING).equals(Direction.WEST)))
             {
-                event.setUseItem(Event.Result.DENY);
+                event.setUseItem(TriState.FALSE);
                 //return;
             }
         }

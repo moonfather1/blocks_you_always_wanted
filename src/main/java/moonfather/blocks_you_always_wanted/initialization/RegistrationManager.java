@@ -3,18 +3,19 @@ package moonfather.blocks_you_always_wanted.initialization;
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.blocks.*;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,9 @@ import java.util.function.Supplier;
 
 public class RegistrationManager
 {
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MODID);
+    private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Constants.MODID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Constants.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Constants.MODID);
     public static List<Supplier<Item>> itemsForCreativeTabs = new ArrayList<>();
 
     public static void init(IEventBus modBus)
@@ -41,9 +42,9 @@ public class RegistrationManager
     private static final List<Supplier<Block>> signBlocks = new ArrayList<>();
     private static final Map<Block, Supplier<Block>> signBlocksByOriginal = new HashMap<>(); // remove if original is made public
     private static final Map<Integer, Supplier<Block>> fenceBlocksByOriginal = new HashMap<>();
-    public static final RegistryObject<BlockEntityType<ShopSignBlockEntity>> SIGN_BE = BLOCK_ENTITIES.register("sign_be", () -> BlockEntityType.Builder.of(ShopSignBlockEntity::new, listToArray(signBlocks)).build(null));
-    public static final RegistryObject<Block> FENCE_TECHNICAL = BLOCKS.register("fence_technical_block", FenceTechnicalBlock::new);
-    public static final RegistryObject<Block> GATE_TECHNICAL = BLOCKS.register("gate_technical_block", GateTechnicalBlock::new);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShopSignBlockEntity>> SIGN_BE = BLOCK_ENTITIES.register("sign_be", () -> BlockEntityType.Builder.of(ShopSignBlockEntity::new, listToArray(signBlocks)).build(null));
+    public static final DeferredBlock<Block> FENCE_TECHNICAL = BLOCKS.register("fence_technical_block", FenceTechnicalBlock::new);
+    public static final DeferredBlock<Block> GATE_TECHNICAL = BLOCKS.register("gate_technical_block", GateTechnicalBlock::new);
 
     private static Block[] listToArray(List<Supplier<Block>> list)
     {
@@ -69,10 +70,10 @@ public class RegistrationManager
         addFenceVariant(Blocks.OAK_FENCE, Blocks.SMOOTH_STONE_SLAB, "oak", "fence_on_stone_slab_");
         addFenceVariant(Blocks.SPRUCE_FENCE, Blocks.SMOOTH_STONE_SLAB, "spruce", "fence_on_stone_slab_");
 
-        RegistryObject<Block> finalB1 = BLOCKS.register("gate_main_oak", () -> new GateBlock(Blocks.OAK_FENCE_GATE, WoodType.OAK));
-        itemsForCreativeTabs.add(ITEMS.register("gate_main_oak", () -> new GateHolderItem(finalB1.get())));
-        RegistryObject<Block> finalB2 = BLOCKS.register("gate_main_spruce", () -> new GateBlock(Blocks.SPRUCE_FENCE_GATE, WoodType.SPRUCE));
-        itemsForCreativeTabs.add(ITEMS.register("gate_main_spruce", () -> new GateHolderItem(finalB2.get())));
+        Supplier<Block> finalB1 = BLOCKS.register("gate_main_oak", () -> new GateBlock(Blocks.OAK_FENCE_GATE, WoodType.OAK));
+        itemsForCreativeTabs.add(ITEMS.register("gate_main_oak", () -> new GateHolderItem(finalB1.get(), Items.OAK_FENCE_GATE))); // duplicate arg but it doesn't really matter
+        Supplier<Block> finalB2 = BLOCKS.register("gate_main_spruce", () -> new GateBlock(Blocks.SPRUCE_FENCE_GATE, WoodType.SPRUCE));
+        itemsForCreativeTabs.add(ITEMS.register("gate_main_spruce", () -> new GateHolderItem(finalB2.get(), Items.SPRUCE_FENCE_GATE)));
         BLOCKS.register("gate_spec_oak", () -> new GateBlock_V2(Blocks.OAK_FENCE_GATE, Blocks.OAK_SLAB, WoodType.OAK));
         BLOCKS.register("gate_spec_spruce", () -> new GateBlock_V2(Blocks.SPRUCE_FENCE_GATE, Blocks.SPRUCE_SLAB, WoodType.SPRUCE));
     }
@@ -80,7 +81,7 @@ public class RegistrationManager
     private static void addSignVariant(Block original)
     {
         SignBlock originalCast = (SignBlock) original;
-        RegistryObject<Block> ourBlock;
+        Supplier<Block> ourBlock;
         if (! (original instanceof WallHangingSignBlock))
         {
             ourBlock = BLOCKS.register("hanging_sign_1_" + originalCast.type().name(), () -> new HangingSignBlock1(originalCast));
@@ -95,7 +96,7 @@ public class RegistrationManager
 
     private static void addFenceVariant(Block original, Block slab, String woodType, String prefix)
     {
-        RegistryObject<Block> ourBlock = BLOCKS.register(prefix + woodType, () -> new FenceOnASlabBlock(original));
+        Supplier<Block> ourBlock = BLOCKS.register(prefix + woodType, () -> new FenceOnASlabBlock(original));
         cacheFenceBlock(original, slab, ourBlock);
     }
     /////////////////////////////////////////////////////////////////////

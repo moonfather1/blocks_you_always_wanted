@@ -6,6 +6,7 @@
 		"hinge": "minecraft:block/light_gray_concrete",
 		"particle": "#texture"
 	},
+	"ambientocclusion": false,
 	"elements": [
 		{
 			"name": "left post",

@@ -3,14 +3,17 @@ package moonfather.blocks_you_always_wanted.blocks;
 import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FenceBlock;
@@ -27,7 +30,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class FenceOnASlabBlock extends FenceBlock
@@ -149,8 +151,9 @@ public class FenceOnASlabBlock extends FenceBlock
 
     ////////////////////////////////////////////////
 
+
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         return this.original.getCloneItemStack(state, target, level, pos, player);
     }
@@ -251,22 +254,23 @@ public class FenceOnASlabBlock extends FenceBlock
     ////////////////////////////////////
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        double y = blockHitResult.getLocation().y;
+        double y = hitResult.getLocation().y;
         y = y - blockPos.getY();
         if (y <= 0.5)
         {
             //slab right-clicked. pass result will probably result in a block being placed next to the slab.
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        if (y > 1.0 && (blockHitResult.getLocation().x > 6/16d && blockHitResult.getLocation().x < 10/16d) && (blockHitResult.getLocation().z > 6/16d && blockHitResult.getLocation().z < 10/16d))
+        if (y > 1.0 && (hitResult.getLocation().x > 6/16d && hitResult.getLocation().x < 10/16d) && (hitResult.getLocation().z > 6/16d && hitResult.getLocation().z < 10/16d))
         {
             // top part right-clicked. let's have tech block handle it.
-            return level.getBlockState(blockPos.above()).use(level, player, interactionHand, blockHitResult.withPosition(blockPos.above()));
+            BlockState stateAbove = level.getBlockState(blockPos.above());
+            return stateAbove.useItemOn(stack, level, player, hand, hitResult.withPosition(blockPos.above()));
         }
         // middle or sides. no action at the moment.
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }
 
     ////////////////////////////////////
@@ -295,7 +299,7 @@ public class FenceOnASlabBlock extends FenceBlock
     {
         if (technicalBlockInstance == null)
         {
-            technicalBlockInstance = (FenceTechnicalBlock) ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID, "fence_technical_block"));
+            technicalBlockInstance = (FenceTechnicalBlock) BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "fence_technical_block"));
         }
         return technicalBlockInstance;
     }

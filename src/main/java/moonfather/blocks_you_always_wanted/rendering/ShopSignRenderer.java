@@ -13,15 +13,17 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolActions;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ItemAbilities;
 import org.joml.Quaternionf;
 
 import java.util.HashMap;
@@ -89,7 +91,7 @@ public class ShopSignRenderer implements BlockEntityRenderer<ShopSignBlockEntity
             poseStack.mulPose(ROTATE_Y_180);
             Minecraft.getInstance().getItemRenderer().renderStatic(blockEntity.getItem(), ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, blockEntity.getLevel(), renderId);
         }
-        else if (blockEntity.getItem().canPerformAction(ToolActions.SHIELD_BLOCK))
+        else if (blockEntity.getItem().canPerformAction(ItemAbilities.SHIELD_BLOCK))
         {
             // shield
             poseStack.scale(0.5f, 0.5f, 0.3f);
@@ -189,4 +191,20 @@ public class ShopSignRenderer implements BlockEntityRenderer<ShopSignBlockEntity
         rotationCache.put(angle, result);
         return result;
     }
+
+    //////////////////////////////////////////////////
+
+
+    @Override
+    public AABB getRenderBoundingBox(ShopSignBlockEntity blockEntity)
+    {
+        if (this.renderBox == null || ! blockEntity.getBlockPos().equals(this.lastPos))
+        {
+            this.renderBox = new net.minecraft.world.phys.AABB(blockEntity.getBlockPos());
+            this.lastPos = blockEntity.getBlockPos();
+        }
+        return renderBox;
+    }
+    private net.minecraft.world.phys.AABB renderBox = null;
+    private BlockPos lastPos = null;
 }

@@ -1,17 +1,23 @@
 package moonfather.blocks_you_always_wanted.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,9 +33,12 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class GateTechnicalBlock extends HorizontalDirectionalBlock
 {
     public static final BooleanProperty IN_WALL = BlockStateProperties.IN_WALL;
+
     public static class ShapeSet
     {
         public static final VoxelShape EMPTY = Shapes.empty();
@@ -47,9 +56,18 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
 
     public GateTechnicalBlock()
     {
-        super(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(2.0F, 3.0F).noParticlesOnBreak());
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(2.0F, 3.0F));
         this.registerDefaultState(this.stateDefinition.any().setValue(IN_WALL, Boolean.FALSE));
     }
+
+    @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec()
+    {
+        return CODEC;
+    }
+    private static final MapCodec<GateTechnicalBlock> CODEC = RecordCodecBuilder.mapCodec((p_308823_) -> {
+        return p_308823_.group(propertiesCodec()).apply(p_308823_, (prop)->new GateTechnicalBlock());
+    });
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -89,8 +107,9 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_53360_, BlockGetter p_53361_, BlockPos p_53362_, PathComputationType p_53363_) {
-        switch (p_53363_) {
+    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType)
+    {
+        switch (pathComputationType) {
             case LAND:
                 return true;
             case WATER:
@@ -108,15 +127,23 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        BlockPos below = blockPos.below();
+        BlockPos below = pos.below();
         BlockState belowState = level.getBlockState(below);
-        return belowState.getBlock().use(belowState, level, below, player, hand, blockHitResult.withPosition(below));
+        return belowState.useItemOn(stack, level, player, hand, hitResult.withPosition(below));
     }
 
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_53377_)
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
+    {
+        BlockPos below = pos.below();
+        BlockState belowState = level.getBlockState(below);
+        return belowState.useWithoutItem(level, player, hitResult.withPosition(below));
+    }
+
+    @Override
+    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean movedByPiston)
     {
         if (! level.isClientSide)
         {
@@ -154,7 +181,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
                 }
             }
             // walls. not trivial so moving to a separate method.
-            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, p_53377_);
+            this.updateWallProperty(blockState, level, blockPos, p_53375_, otherPos, movedByPiston);
         }
     }
 
@@ -166,7 +193,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void updateWallProperty(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean p_12345_)
+    private void updateWallProperty(BlockState blockState, Level level, BlockPos blockPos, Block p_53375_, BlockPos otherPos, boolean movedByPiston)
     {
         if (otherPos.getY() == blockPos.getY())
         {
@@ -175,7 +202,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
             {
                 BlockPos belowPos = blockPos.below();
                 BlockState belowState = level.getBlockState(belowPos);
-                belowState.getBlock().neighborChanged(belowState, level, belowPos, Blocks.STONE_BRICK_WALL, blockPos, p_12345_);
+                belowState.handleNeighborChanged(level, belowPos, Blocks.STONE_BRICK_WALL, blockPos, movedByPiston);
             }
         }
     }
@@ -189,10 +216,10 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         BlockPos below = pos.below();
         BlockState belowState = level.getBlockState(below);
-        return belowState.getCloneItemStack(target, level, below, player);
+        return belowState.getCloneItemStack(target, level, pos, player);
     }
 }

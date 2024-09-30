@@ -5,6 +5,7 @@
 		"texture": "minecraft:block/oak_planks",
 		"particle": "#texture"
 	},
+	"ambientocclusion": false,
 	"elements": [
 		{
 			"name": "left post",

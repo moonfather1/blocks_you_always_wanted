@@ -9,15 +9,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(AbstractMinecart.class)
 public abstract class MinecartMixins extends Entity
@@ -26,7 +23,7 @@ public abstract class MinecartMixins extends Entity
     public MinecartMixins(EntityType<?> entityType, Level level) { super(entityType, level); }
 
 
-    @Inject(method = "comeOffTrack()V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "Lnet/minecraft/world/entity/vehicle/AbstractMinecart;comeOffTrack()V", at = @At("HEAD"), cancellable = true)
     private void injected(CallbackInfo ci)
     {
         int x = Mth.floor(this.getX());  // copied part; change to mixin extras in nf 1.21 and fab
