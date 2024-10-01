@@ -387,4 +387,39 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         ).apply(p_308823_, (prop, sound1, sound2, slabId) -> new GateBlock_V2(prop, sound1.orElse(null), sound2.orElse(null), slabId));
     });
     private String slabId = "minecraft:acacia_slab";
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
+    {
+        if (this.flammabilityIgniteOdds < 0)
+        {
+            if (this.matchingSlab != null)
+            {
+                this.flammabilityIgniteOdds = this.matchingSlab.getFireSpreadSpeed(this.matchingSlab.defaultBlockState(), level, pos, direction);
+            }
+            else
+            {
+                this.flammabilityIgniteOdds = 5;
+            }
+        }
+        return this.flammabilityIgniteOdds;
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
+    {
+        if (this.flammabilityPerishOdds < 0)
+        {
+            if (this.matchingSlab != null)
+            {
+                this.flammabilityPerishOdds = this.matchingSlab.getFlammability(this.matchingSlab.defaultBlockState(), level, pos, direction);
+            }
+            else
+            {
+                this.flammabilityPerishOdds = 20;
+            }
+        }
+        return this.flammabilityPerishOdds;
+    }
+    private int flammabilityIgniteOdds = -123, flammabilityPerishOdds = -123;
 }

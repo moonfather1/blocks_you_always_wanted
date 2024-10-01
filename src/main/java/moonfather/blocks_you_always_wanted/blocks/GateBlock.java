@@ -66,10 +66,12 @@ public class GateBlock extends HorizontalDirectionalBlock
     }
     private final net.minecraft.sounds.SoundEvent openSound;
     private final net.minecraft.sounds.SoundEvent closeSound;
+    private Block original = null;
 
     public GateBlock(Block original, WoodType woodType)
     {
         this(Properties.ofFullCopy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose());
+        this.original = original;
     }
 
     public GateBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound)
@@ -389,4 +391,41 @@ public class GateBlock extends HorizontalDirectionalBlock
             SoundEvent.DIRECT_CODEC.optionalFieldOf("closeSound").forGetter((gate) -> Optional.of(gate.closeSound))
         ).apply(p_308823_, (prop, sound1, sound2) -> new GateBlock(prop, sound1.orElse(null), sound2.orElse(null)));
     });
+
+    ///////////    i don't even need the crap above in 1.21.1   //////////////////
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
+    {
+        if (this.flammabilityIgniteOdds < 0)
+        {
+            if (this.original != null)
+            {
+                this.flammabilityIgniteOdds = this.original.getFireSpreadSpeed(this.original.defaultBlockState(), level, pos, direction);
+            }
+            else
+            {
+                this.flammabilityIgniteOdds = 5;
+            }
+        }
+        return this.flammabilityIgniteOdds;
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
+    {
+        if (this.flammabilityPerishOdds < 0)
+        {
+            if (this.original != null)
+            {
+                this.flammabilityPerishOdds = this.original.getFlammability(this.original.defaultBlockState(), level, pos, direction);
+            }
+            else
+            {
+                this.flammabilityPerishOdds = 20;
+            }
+        }
+        return this.flammabilityPerishOdds;
+    }
+    private int flammabilityIgniteOdds = -123, flammabilityPerishOdds = -123;
 }

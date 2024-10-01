@@ -32,7 +32,7 @@ public class BlocksMod
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
+        if (MainConfig.COMMON.GatesEnabled.get() && event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
         {
             for (Supplier<Item> item : RegistrationManager.itemsForCreativeTabs)
             {
