@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class GateBlock_V2 extends HorizontalDirectionalBlock
+public class GateRaisedBlock extends HorizontalDirectionalBlock
 {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -75,12 +75,12 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     private final SoundEvent closeSound;
     private final Block matchingSlab;
 
-    public GateBlock_V2(Block original, Block slab, WoodType woodType)
+    public GateRaisedBlock(Block original, Block slab, WoodType woodType)
     {
         this(Properties.ofFullCopy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose(), slab);
     }
 
-    public GateBlock_V2(Properties properties, SoundEvent openSound, SoundEvent closeSound, Block slab)
+    public GateRaisedBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound, Block slab)
     {
         super(properties);
         this.openSound = openSound;
@@ -89,7 +89,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         this.matchingSlab = slab;
     }
 
-    public GateBlock_V2(Properties properties, SoundEvent openSound, SoundEvent closeSound, String slabId)
+    public GateRaisedBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound, String slabId)
     {
         this(properties, openSound, closeSound, BuiltInRegistries.BLOCK.get(ResourceLocation.parse(slabId)));
     }
@@ -386,13 +386,13 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     /////////////////////////////////////////////////////
 
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }
-    private static final MapCodec<GateBlock_V2> CODEC = RecordCodecBuilder.mapCodec((p_308823_) -> {
+    private static final MapCodec<GateRaisedBlock> CODEC = RecordCodecBuilder.mapCodec((p_308823_) -> {
         return p_308823_.group(
                 propertiesCodec(),
                 SoundEvent.DIRECT_CODEC.optionalFieldOf("openSound").forGetter((gate) -> Optional.of(gate.openSound)),
                 SoundEvent.DIRECT_CODEC.optionalFieldOf("closeSound").forGetter((gate) -> Optional.of(gate.closeSound)),
                 Codec.STRING.fieldOf("slabId").forGetter(gate -> gate.slabId)
-        ).apply(p_308823_, (prop, sound1, sound2, slabId) -> new GateBlock_V2(prop, sound1.orElse(null), sound2.orElse(null), slabId));
+        ).apply(p_308823_, (prop, sound1, sound2, slabId) -> new GateRaisedBlock(prop, sound1.orElse(null), sound2.orElse(null), slabId));
     });
     private String slabId = "minecraft:acacia_slab";
 

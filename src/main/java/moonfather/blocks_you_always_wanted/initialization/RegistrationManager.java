@@ -2,6 +2,8 @@ package moonfather.blocks_you_always_wanted.initialization;
 
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.blocks.*;
+import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceOnASlabBlock;
+import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceTechnicalBlock;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -74,8 +76,8 @@ public class RegistrationManager
         itemsForCreativeTabs.add(ITEMS.register("gate_main_oak", () -> new GateHolderItem(finalB1.get(), Items.OAK_FENCE_GATE))); // duplicate arg but it doesn't really matter
         Supplier<Block> finalB2 = BLOCKS.register("gate_main_spruce", () -> new GateBlock(Blocks.SPRUCE_FENCE_GATE, WoodType.SPRUCE));
         itemsForCreativeTabs.add(ITEMS.register("gate_main_spruce", () -> new GateHolderItem(finalB2.get(), Items.SPRUCE_FENCE_GATE)));
-        BLOCKS.register("gate_spec_oak", () -> new GateBlock_V2(Blocks.OAK_FENCE_GATE, Blocks.OAK_SLAB, WoodType.OAK));
-        BLOCKS.register("gate_spec_spruce", () -> new GateBlock_V2(Blocks.SPRUCE_FENCE_GATE, Blocks.SPRUCE_SLAB, WoodType.SPRUCE));
+        BLOCKS.register("gate_spec_oak", () -> new GateRaisedBlock(Blocks.OAK_FENCE_GATE, Blocks.OAK_SLAB, WoodType.OAK));
+        BLOCKS.register("gate_spec_spruce", () -> new GateRaisedBlock(Blocks.SPRUCE_FENCE_GATE, Blocks.SPRUCE_SLAB, WoodType.SPRUCE));
     }
 
     private static void addSignVariant(Block original)

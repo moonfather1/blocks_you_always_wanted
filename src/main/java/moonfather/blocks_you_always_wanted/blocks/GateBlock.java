@@ -3,6 +3,7 @@ package moonfather.blocks_you_always_wanted.blocks;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceOnASlabBlock;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -169,7 +170,7 @@ public class GateBlock extends HorizontalDirectionalBlock
             {
                 return ItemInteractionResult.FAIL;
             }
-            blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState).setValue(GateBlock_V2.BLOCK_BELOW, GateBlock.railToStateIndex(player.getMainHandItem().getItem()));
+            blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState).setValue(GateRaisedBlock.BLOCK_BELOW, GateBlock.railToStateIndex(player.getMainHandItem().getItem()));
             level.setBlock(blockPos, blockState, 11);
             level.playSound(player, blockPos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
             if (! player.isCreative())
@@ -362,17 +363,17 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     public static int railToStateIndex(Item rail)
     {
-        if (rail.equals(Items.POWERED_RAIL)) return GateBlock_V2.ON_POWERED_RAIL;
-        if (rail.equals(Items.RAIL)) return GateBlock_V2.ON_REGULAR_RAIL;
+        if (rail.equals(Items.POWERED_RAIL)) return GateRaisedBlock.ON_POWERED_RAIL;
+        if (rail.equals(Items.RAIL)) return GateRaisedBlock.ON_REGULAR_RAIL;
         return 0;
     }
 
     public static int blockToStateIndex(Block block)
     {
-        if (block.equals(Blocks.SMOOTH_STONE_SLAB)) return GateBlock_V2.ON_STONE_SLAB;
-        if (block instanceof SlabBlock) return GateBlock_V2.ON_WOODEN_SLAB;
-        if (block.equals(Blocks.RAIL)) return GateBlock_V2.ON_REGULAR_RAIL;
-        if (block.equals(Blocks.POWERED_RAIL)) return GateBlock_V2.ON_POWERED_RAIL;
+        if (block.equals(Blocks.SMOOTH_STONE_SLAB)) return GateRaisedBlock.ON_STONE_SLAB;
+        if (block instanceof SlabBlock) return GateRaisedBlock.ON_WOODEN_SLAB;
+        if (block.equals(Blocks.RAIL)) return GateRaisedBlock.ON_REGULAR_RAIL;
+        if (block.equals(Blocks.POWERED_RAIL)) return GateRaisedBlock.ON_POWERED_RAIL;
         return 0;
     }
     public static int blockToStateIndex(Block block1, Block block2)

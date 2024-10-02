@@ -3,9 +3,9 @@ package moonfather.blocks_you_always_wanted.blocks;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
+import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceOnASlabBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,7 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,8 +31,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class GateTechnicalBlock extends HorizontalDirectionalBlock
 {
@@ -151,7 +148,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
             if (blockPos.getX() == otherPos.getX() && blockPos.getZ() == otherPos.getZ() && blockPos.getY() - 1 == otherPos.getY())
             {
                 BlockState below = level.getBlockState(otherPos);
-                if (below.getBlock() instanceof GateBlock || below.getBlock() instanceof GateBlock_V2)
+                if (below.getBlock() instanceof GateBlock || below.getBlock() instanceof GateRaisedBlock)
                 {
                     if (blockState.getValue(FACING) != below.getValue(FACING) || blockState.getValue(IN_WALL) != below.getValue(IN_WALL))
                     {

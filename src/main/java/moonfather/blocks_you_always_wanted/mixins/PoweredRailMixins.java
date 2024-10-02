@@ -1,6 +1,6 @@
 package moonfather.blocks_you_always_wanted.mixins;
 
-import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
+import moonfather.blocks_you_always_wanted.blocks.GateRaisedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.PoweredRailBlock;
@@ -18,7 +18,7 @@ public class PoweredRailMixins
     private void injected(Level level, BlockPos state, boolean searchForward, int recursionCount, RailShape shape, CallbackInfoReturnable<Boolean> cir)
     {
         BlockState blockStateMaybeGate = level.getBlockState(state);
-        if (blockStateMaybeGate.getBlock() instanceof GateBlock_V2 && blockStateMaybeGate.getValue(GateBlock_V2.PROVIDES_RAIL_POWER))
+        if (blockStateMaybeGate.getBlock() instanceof GateRaisedBlock && blockStateMaybeGate.getValue(GateRaisedBlock.PROVIDES_RAIL_POWER))
         {
             cir.setReturnValue(true);
         }

@@ -1,4 +1,4 @@
-package moonfather.blocks_you_always_wanted.events;
+package moonfather.blocks_you_always_wanted.events.obsolete;
 
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.MainConfig;

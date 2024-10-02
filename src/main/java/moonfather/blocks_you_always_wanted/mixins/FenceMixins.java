@@ -1,6 +1,6 @@
 package moonfather.blocks_you_always_wanted.mixins;
 
-import moonfather.blocks_you_always_wanted.blocks.FenceOnASlabBlock;
+import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceOnASlabBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;

@@ -2,7 +2,7 @@ package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
-import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
+import moonfather.blocks_you_always_wanted.blocks.GateRaisedBlock;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -91,7 +91,7 @@ public class TransformGateEvent
                 }
             }
             Block replacement = GateBlock.toRaisedGate(gate);
-            if (slab != null && ! (slab.equals(Blocks.SMOOTH_STONE_SLAB)) && ! ((GateBlock_V2) replacement).slabMatches(slab))
+            if (slab != null && ! (slab.equals(Blocks.SMOOTH_STONE_SLAB)) && ! ((GateRaisedBlock) replacement).slabMatches(slab))
             {
                 event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_SLAB_TYPE, true);
                 event.setCancellationResult(InteractionResult.FAIL);
@@ -110,7 +110,7 @@ public class TransformGateEvent
             {
                 BlockPlaceContext context = new BlockPlaceContext(event.getEntity(), event.getHand(), ItemStack.EMPTY.copy(), event.getHitVec().withPosition(event.getHitVec().getBlockPos().below()));
                 BlockState newState = replacement.getStateForPlacement(context)
-                        .setValue(GateBlock_V2.BLOCK_BELOW, GateBlock.blockToStateIndex(slab, rail));
+                        .setValue(GateRaisedBlock.BLOCK_BELOW, GateBlock.blockToStateIndex(slab, rail));
                 event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos(), newState);
                 BlockState pt2 = RegistrationManager.GATE_TECHNICAL.get().withPropertiesOf(newState);
                 event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), pt2);
@@ -134,7 +134,7 @@ public class TransformGateEvent
                     {
                         Block replacement = GateBlock.toRaisedGate(gate);
                         BlockState newState = replacement.withPropertiesOf(above)
-                                                         .setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.POWERED_RAIL) ? GateBlock_V2.ON_POWERED_RAIL : GateBlock_V2.ON_REGULAR_RAIL);
+                                                         .setValue(GateRaisedBlock.BLOCK_BELOW, event.getItemStack().is(Items.POWERED_RAIL) ? GateRaisedBlock.ON_POWERED_RAIL : GateRaisedBlock.ON_REGULAR_RAIL);
                         event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), newState);
                         event.getLevel().playSound(event.getEntity(), event.getHitVec().getBlockPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, event.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
                         if (! event.getEntity().isCreative())
@@ -158,13 +158,13 @@ public class TransformGateEvent
                 {
                     Block replacement = GateBlock.toRaisedGate(gate);
                     newState = replacement.withPropertiesOf(above)
-                                          .setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.SMOOTH_STONE_SLAB) ? GateBlock_V2.ON_STONE_SLAB : GateBlock_V2.ON_WOODEN_SLAB);
+                                          .setValue(GateRaisedBlock.BLOCK_BELOW, event.getItemStack().is(Items.SMOOTH_STONE_SLAB) ? GateRaisedBlock.ON_STONE_SLAB : GateRaisedBlock.ON_WOODEN_SLAB);
                 }
-                if (above.getBlock() instanceof GateBlock_V2 gate2 && above.getValue(GateBlock_V2.BLOCK_BELOW).equals(0))
+                if (above.getBlock() instanceof GateRaisedBlock gate2 && above.getValue(GateRaisedBlock.BLOCK_BELOW).equals(0))
                 {
-                    newState = above.setValue(GateBlock_V2.BLOCK_BELOW, event.getItemStack().is(Items.SMOOTH_STONE_SLAB) ? GateBlock_V2.ON_STONE_SLAB : GateBlock_V2.ON_WOODEN_SLAB);
+                    newState = above.setValue(GateRaisedBlock.BLOCK_BELOW, event.getItemStack().is(Items.SMOOTH_STONE_SLAB) ? GateRaisedBlock.ON_STONE_SLAB : GateRaisedBlock.ON_WOODEN_SLAB);
                 }
-                if (newState != null && ! bi.getBlock().equals(Blocks.SMOOTH_STONE_SLAB) && ! ((GateBlock_V2) newState.getBlock()).slabMatches(bi.getBlock()))
+                if (newState != null && ! bi.getBlock().equals(Blocks.SMOOTH_STONE_SLAB) && ! ((GateRaisedBlock) newState.getBlock()).slabMatches(bi.getBlock()))
                 {
                     event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_SLAB_TYPE, true);
                     event.setCancellationResult(InteractionResult.FAIL);
