@@ -23,10 +23,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -35,7 +32,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -48,6 +44,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
 {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    public static final BooleanProperty PROVIDES_RAIL_POWER = BooleanProperty.create("provides_rail_power");;
     public static final BooleanProperty IN_WALL = BlockStateProperties.IN_WALL;
     public static class ShapeSet
     {
@@ -88,7 +85,7 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         super(properties);
         this.openSound = openSound;
         this.closeSound = closeSound;
-        this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.FALSE).setValue(POWERED, Boolean.FALSE).setValue(IN_WALL, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.FALSE).setValue(POWERED, Boolean.FALSE).setValue(PROVIDES_RAIL_POWER, Boolean.FALSE).setValue(IN_WALL, Boolean.FALSE));
         this.matchingSlab = slab;
     }
 
@@ -183,11 +180,12 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     {
         Level level = blockPlaceContext.getLevel();
         BlockPos blockpos = blockPlaceContext.getClickedPos();
-        boolean hasNeighborSignal = level.hasNeighborSignal(blockpos);
         Direction direction = blockPlaceContext.getHorizontalDirection();
+        boolean hasNeighborSignal = level.hasNeighborSignal(blockpos);
+        boolean hasPowerFromRails = this.hasPowerThroughRails(level, blockpos, direction);
         Direction.Axis direction$axis = direction.getAxis();
         boolean nextToWall = direction$axis == Direction.Axis.Z && (this.isWall(level.getBlockState(blockpos.west())) || this.isWall(level.getBlockState(blockpos.east()))) || direction$axis == Direction.Axis.X && (this.isWall(level.getBlockState(blockpos.north())) || this.isWall(level.getBlockState(blockpos.south())));
-        return this.defaultBlockState().setValue(FACING, direction).setValue(OPEN, hasNeighborSignal).setValue(POWERED, hasNeighborSignal).setValue(IN_WALL, nextToWall);
+        return this.defaultBlockState().setValue(FACING, direction).setValue(OPEN, hasNeighborSignal).setValue(PROVIDES_RAIL_POWER, hasNeighborSignal).setValue(POWERED, hasNeighborSignal || hasPowerFromRails).setValue(IN_WALL, nextToWall);
     }
 
     private boolean isWall(BlockState other)
@@ -253,10 +251,11 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
                 }
             }
             // signal
+            boolean hasPowerThroughRails = this.hasPowerThroughRails(level, blockPos, blockState.getValue(FACING));
             boolean hasNeighborSignal = level.hasNeighborSignal(blockPos);
-            if (blockState.getValue(POWERED) != hasNeighborSignal)
+            if ((blockState.getValue(PROVIDES_RAIL_POWER) != hasNeighborSignal) || (blockState.getValue(POWERED) != hasNeighborSignal || hasPowerThroughRails) || (blockState.getValue(OPEN) != hasNeighborSignal))
             {
-                level.setBlock(blockPos, blockState.setValue(POWERED, hasNeighborSignal).setValue(OPEN, hasNeighborSignal), 2);
+                level.setBlock(blockPos, blockState.setValue(POWERED, hasNeighborSignal || hasPowerThroughRails).setValue(OPEN, hasNeighborSignal).setValue(PROVIDES_RAIL_POWER, hasNeighborSignal), 3);
                 if (blockState.getValue(OPEN) != hasNeighborSignal)
                 {
                     level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -295,10 +294,19 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
         }
     }
 
+    private boolean hasPowerThroughRails(Level level, BlockPos blockPos, Direction facing)
+    {
+        BlockState blockStateMaybeRail = level.getBlockState(blockPos.relative(facing));
+        if (blockStateMaybeRail.getBlock() instanceof PoweredRailBlock && blockStateMaybeRail.getValue(PoweredRailBlock.POWERED)) { return true; }
+        blockStateMaybeRail = level.getBlockState(blockPos.relative(facing.getOpposite()));
+        if (blockStateMaybeRail.getBlock() instanceof PoweredRailBlock && blockStateMaybeRail.getValue(PoweredRailBlock.POWERED)) { return true; }
+        return false;
+    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder)
     {
-        stateBuilder.add(FACING, OPEN, POWERED, IN_WALL, BLOCK_BELOW);
+        stateBuilder.add(FACING, OPEN, POWERED, PROVIDES_RAIL_POWER, IN_WALL, BLOCK_BELOW);
     }
     public static final int ON_WOODEN_SLAB = 1;
     public static final int ON_STONE_SLAB = 2;

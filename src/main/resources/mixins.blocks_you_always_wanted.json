@@ -5,7 +5,8 @@
   "package": "moonfather.blocks_you_always_wanted.mixins",
   "mixins": [
     "FenceMixins",
-    "MinecartMixins"
+    "MinecartMixins",
+    "PoweredRailMixins"
   ],
   "client": [
   ],
