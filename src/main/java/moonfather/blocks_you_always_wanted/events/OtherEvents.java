@@ -13,7 +13,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraftforge.common.Tags;
@@ -124,7 +123,7 @@ public class OtherEvents
             {
                 return; // allow these. will break gate if we're not happy later.
             }
-            if (bi.getBlock() instanceof TorchBlock) // todo: tag
+            if (bi.getBlock().defaultBlockState().is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
             {
                 return; // allow these. still testing.
             }

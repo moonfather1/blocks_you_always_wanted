@@ -60,7 +60,6 @@ public class TransformFenceEvent
                 boolean aboveIsWater = event.getLevel().getFluidState(above).isSourceOfType(Fluids.WATER);
                 event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos(), newState);
                 event.getLevel().setBlockAndUpdate(above, RegistrationManager.FENCE_TECHNICAL.get().defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, aboveIsWater));
-                replacement.use(newState, event.getLevel(), event.getHitVec().getBlockPos(), event.getEntity(), InteractionHand.MAIN_HAND, event.getHitVec());
             }
             if (! event.getEntity().isCreative())
             {

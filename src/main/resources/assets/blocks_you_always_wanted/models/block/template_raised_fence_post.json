@@ -3,6 +3,7 @@
 	"textures": {
 		"particle": "#fence"
 	},
+	"ambientocclusion": false,
 	"elements": [
 		{
 			"name": "Center post",

@@ -4,6 +4,7 @@
         "lantern": "minecraft:block/lantern",
         "particle": "#lantern"
     },
+    "ambientocclusion": false,
     "elements": [
         {   "from": [ 5, 7, 5 ],
             "to": [ 11, 14, 11 ],

@@ -6,6 +6,7 @@
 		"texture": "minecraft:block/oak_planks",
 		"hinge": "minecraft:block/light_gray_concrete"
 	},
+	"ambientocclusion": false,
 	"elements": [
 		{
 			"name": "left post",
