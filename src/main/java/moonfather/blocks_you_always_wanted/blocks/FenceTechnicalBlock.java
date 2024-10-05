@@ -320,4 +320,27 @@ public class FenceTechnicalBlock extends Block
     {
         return false;
     }
+
+    // fire ///////////////////////////////////////
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
+    {
+        if (this.flammabilityIgniteOdds < 0)
+        {
+            this.flammabilityIgniteOdds = level.getBlockState(pos.below()).getFireSpreadSpeed(level, pos, direction);
+        }
+        return this.flammabilityIgniteOdds;
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
+    {
+        if (this.flammabilityPerishOdds < 0)
+        {
+            this.flammabilityPerishOdds = level.getBlockState(pos.below()).getFlammability(level, pos, direction);
+        }
+        return this.flammabilityPerishOdds;
+    }
+    private int flammabilityIgniteOdds = -123, flammabilityPerishOdds = -123;
 }
