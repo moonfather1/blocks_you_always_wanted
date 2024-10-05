@@ -3,7 +3,6 @@ package moonfather.blocks_you_always_wanted.blocks;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceOnASlabBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -171,7 +170,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! other.getBlock().equals(FenceOnASlabBlock.technical()) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
+                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
                     {
                         level.destroyBlock(blockPos, true);
                     }

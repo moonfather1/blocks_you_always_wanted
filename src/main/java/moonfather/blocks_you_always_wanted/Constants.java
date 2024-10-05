@@ -27,6 +27,7 @@ public class Constants
         public static final Component MESSAGE_NO_ROOM = Component.translatable("messages.blocks_you_always_wanted.no_room_above").withStyle(Style.EMPTY.withColor(0xff999988));
         public static final Component MESSAGE_NO_ROOM_SIDE = Component.translatable("messages.blocks_you_always_wanted.no_room_on_side").withStyle(Style.EMPTY.withColor(0xffaa9988));
         public static final Component MESSAGE_SLAB_TYPE = Component.translatable("messages.blocks_you_always_wanted.wrong_slab").withStyle(Style.EMPTY.withColor(0xff998855));
+        public static final Component MESSAGE_FENCE_TYPE = Component.translatable("messages.blocks_you_always_wanted.wrong_fence").withStyle(Style.EMPTY.withColor(0xff998855));
         public static final Component MESSAGE_CRAFT_WIDE_GATE = Component.translatable("messages.blocks_you_always_wanted.craft_wide_gate").withStyle(Style.EMPTY.withColor(0xff998855));
         public static final Component MESSAGE_RAIL_TYPE = Component.translatable("messages.blocks_you_always_wanted.rail_type").withStyle(Style.EMPTY.withColor(0xff998855));
         public static final Component MESSAGE_STRAIGHT_ONLY = Component.translatable("messages.blocks_you_always_wanted.straight_rails_only").withStyle(Style.EMPTY.withColor(0xff998855));

@@ -130,9 +130,17 @@ public class TransformGateEvent
                 if (event.getLevel().getBlockState(event.getHitVec().getBlockPos()).isFaceSturdy(event.getLevel(), event.getHitVec().getBlockPos(), Direction.UP))
                 {
                     BlockState above = event.getLevel().getBlockState(event.getHitVec().getBlockPos().above());
-                    if (above.getBlock() instanceof GateBlock gate)
+                    Block replacement = null;
+                    if (above.getBlock() instanceof GateBlock gate1)
                     {
-                        Block replacement = GateBlock.toRaisedGate(gate);
+                        replacement = GateBlock.toRaisedGate(gate1);
+                    }
+                    else if (above.getBlock() instanceof GateRaisedBlock gate2)
+                    {
+                        replacement = gate2;
+                    }
+                    if (replacement != null)
+                    {
                         BlockState newState = replacement.withPropertiesOf(above)
                                                          .setValue(GateRaisedBlock.BLOCK_BELOW, event.getItemStack().is(Items.POWERED_RAIL) ? GateRaisedBlock.ON_POWERED_RAIL : GateRaisedBlock.ON_REGULAR_RAIL);
                         event.getLevel().setBlockAndUpdate(event.getHitVec().getBlockPos().above(), newState);

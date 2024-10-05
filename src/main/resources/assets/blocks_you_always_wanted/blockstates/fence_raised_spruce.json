@@ -7,11 +7,6 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/spruce_slab"
-      }
-    },
-    {
-      "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_spruce",
         "uvlock": true
       },
@@ -125,6 +120,46 @@
       },
       "when": {
         "west_up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_torch1"
+      },
+      "when": {
+        "top_variant": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_lantern1"
+      },
+      "when": {
+        "top_variant": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_lantern2"
+      },
+      "when": {
+        "top_variant": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_torch2"
+      },
+      "when": {
+        "top_variant": 4
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_torch3"
+      },
+      "when": {
+        "top_variant": 5
       }
     }
   ]

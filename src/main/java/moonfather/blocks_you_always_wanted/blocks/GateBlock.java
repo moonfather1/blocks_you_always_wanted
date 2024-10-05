@@ -3,7 +3,6 @@ package moonfather.blocks_you_always_wanted.blocks;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.blocks.obsolete.FenceOnASlabBlock;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -242,8 +241,7 @@ public class GateBlock extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if ((other.is(BlockTags.SLABS) && other.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM))
-                        || other.getBlock() instanceof FenceOnASlabBlock)
+                    if (other.is(BlockTags.SLABS) && other.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM))
                     {
                         // allow lower slabs
                         blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState);
@@ -281,13 +279,13 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
         BlockPos otherPos = blockPos.relative(blockState.getValue(FACING).getClockWise());
         BlockState other = level.getBlockState(otherPos);
-        if (other.is(BlockTags.SLABS) || other.getBlock() instanceof FenceOnASlabBlock)
+        if (other.is(BlockTags.SLABS))
         {
             this.neighborChanged(blockState, level, blockPos, other.getBlock(), otherPos, true);
         }
         otherPos = blockPos.relative(blockState.getValue(FACING).getCounterClockWise());
         other = level.getBlockState(otherPos);
-        if (other.is(BlockTags.SLABS) || other.getBlock() instanceof FenceOnASlabBlock)
+        if (other.is(BlockTags.SLABS))
         {
             this.neighborChanged(blockState, level, blockPos, other.getBlock(), otherPos, true);
         }
