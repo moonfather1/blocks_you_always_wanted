@@ -2,6 +2,7 @@ package moonfather.blocks_you_always_wanted.mixins;
 
 import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -9,15 +10,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(AbstractMinecart.class)
 public abstract class MinecartMixins extends Entity
@@ -54,6 +52,31 @@ public abstract class MinecartMixins extends Entity
         deltaMovement = deltaMovement.multiply(mul, 0.0D, mul);
         if (this.isInWater()) { deltaMovement = deltaMovement.scale((double)0.95F); }
         this.setDeltaMovement(deltaMovement);
+
+        // now powered rail handling
+        if (blockState.getValue(GateBlock_V2.BLOCK_BELOW).equals(GateBlock_V2.ON_POWERED_RAIL) && blockState.getValue(GateBlock_V2.POWERED))
+        {
+            Vec3 delta = this.getDeltaMovement();
+            double horizontalDistance = delta.horizontalDistance();
+            if (horizontalDistance > 0.01D)
+            {
+                this.setDeltaMovement(delta.add(delta.x / horizontalDistance * 0.06D, 0.0D, delta.z / horizontalDistance * 0.06D));
+            }
+            else
+            {
+                double dx = delta.x;
+                double dz = delta.z;
+                if (blockState.getValue(GateBlock_V2.FACING).getAxis().equals(Direction.Axis.X))
+                {
+                    dx = Math.signum(dx) * 0.02D;
+                }
+                else
+                {
+                    dz = Math.signum(dz) * 0.02D;
+                }
+                this.setDeltaMovement(dx, delta.y, dz);
+            }
+        }
 
         // and done.
         ci.cancel();
