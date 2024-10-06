@@ -39,6 +39,7 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty PROVIDES_RAIL_POWER = BooleanProperty.create("provides_rail_power");
     public static final BooleanProperty IN_WALL = BlockStateProperties.IN_WALL;
+
     public static class ShapeSet
     {
         public static final VoxelShape EMPTY = Shapes.empty();
@@ -363,6 +364,11 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
         return GateBlock.fromRaisedGate(state.getBlock()).asItem().getDefaultInstance();
+    }
+
+    public boolean isOnRail(BlockState state)
+    {
+        return state.getValue(GateRaisedBlock.BLOCK_BELOW) == ON_POWERED_RAIL || state.getValue(GateRaisedBlock.BLOCK_BELOW) == ON_REGULAR_RAIL;
     }
 
     ///// flammability /////////////////////////
