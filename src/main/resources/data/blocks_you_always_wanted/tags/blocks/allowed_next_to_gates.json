@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "#forge:lanterns",
-    "#forge:torches"
+    "#forge:torches",
+    "#minecraft:small_flowers",
+    "#minecraft:replaceable"
   ]
 }

@@ -11,6 +11,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
@@ -71,10 +72,21 @@ public class OtherGateEvents
         // first see if we have room for the gate and deny it if we do not
         if (event.getItemStack().getItem() instanceof BlockItem bi && bi.getBlock() instanceof GateBlock)
         {
-            // check if there is room for tech block above the gate
+            // set the destination position first
             BlockPos.MutableBlockPos temp1 = new BlockPos.MutableBlockPos();
             temp1.set(event.getPos()); // target
-            if (! event.getLevel().getBlockState(event.getPos()).canBeReplaced() && event.getFace() != null) { temp1.move(event.getFace()); } // empty space?
+            if (event.getFace() != null)
+            {
+                BlockState existing = event.getLevel().getBlockState(event.getPos());
+                if (! (event.getFace().equals(Direction.UP) && (existing.is(BlockTags.SLABS) || existing.is(Blocks.RAIL) || existing.is(Blocks.POWERED_RAIL))))
+                {
+                    if (! existing.canBeReplaced())
+                    {
+                        temp1.move(event.getFace()); // not empty space? move position.
+                    }
+                }
+            }
+            // check if there is room for tech block above the gate
             temp1.move(Direction.UP);
             BlockState above = event.getLevel().getBlockState(temp1);
             if (! above.isAir() && ! above.canBeReplaced())
