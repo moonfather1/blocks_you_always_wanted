@@ -1,6 +1,6 @@
 package moonfather.blocks_you_always_wanted.mixins;
 
-import moonfather.blocks_you_always_wanted.blocks.FenceOnASlabBlock;
+import moonfather.blocks_you_always_wanted.blocks.FenceMainBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,7 +19,7 @@ public abstract class FenceMixins extends CrossCollisionBlock
     @Inject(method = "isSameFence(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At("HEAD"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     private void injected(BlockState other, CallbackInfoReturnable<Boolean> cir)
     {
-        boolean oneOursOneNot = (other.getBlock() instanceof FenceOnASlabBlock) != (((FenceBlock)(Object)this) instanceof FenceOnASlabBlock);
+        boolean oneOursOneNot = (other.getBlock() instanceof FenceMainBlock) != (((FenceBlock)(Object)this) instanceof FenceMainBlock);
         if (oneOursOneNot)
         {
             cir.setReturnValue(false);

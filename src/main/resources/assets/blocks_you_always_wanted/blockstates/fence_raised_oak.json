@@ -7,13 +7,8 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/oak_slab"
-      }
-    },
-    {
-      "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_oak",
-        "uvlock": true
+        "uvlock": false
       },
       "when": {
         "north": "true"
@@ -22,7 +17,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 90
       },
       "when": {
@@ -32,7 +27,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 180
       },
       "when": {
@@ -42,7 +37,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_horizontal_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 270
       },
       "when": {
@@ -52,7 +47,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_oak",
-        "uvlock": true
+        "uvlock": false
       },
       "when": {
         "north_dn": "true"
@@ -61,7 +56,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 90
       },
       "when": {
@@ -71,7 +66,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 180
       },
       "when": {
@@ -81,7 +76,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 270
       },
       "when": {
@@ -91,7 +86,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_oak",
-        "uvlock": true
+        "uvlock": false
       },
       "when": {
         "north_up": "true"
@@ -100,7 +95,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 90
       },
       "when": {
@@ -110,7 +105,7 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 180
       },
       "when": {
@@ -120,11 +115,51 @@
     {
       "apply": {
         "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_oak",
-        "uvlock": true,
+        "uvlock": false,
         "y": 270
       },
       "when": {
         "west_up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_torch1"
+      },
+      "when": {
+        "top_variant": 1
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_lantern1"
+      },
+      "when": {
+        "top_variant": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_lantern2"
+      },
+      "when": {
+        "top_variant": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_torch2"
+      },
+      "when": {
+        "top_variant": 4
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/fence_technical_torch3"
+      },
+      "when": {
+        "top_variant": 5
       }
     }
   ]

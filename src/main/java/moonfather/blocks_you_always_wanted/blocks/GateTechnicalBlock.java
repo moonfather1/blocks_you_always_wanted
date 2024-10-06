@@ -124,7 +124,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
             if (blockPos.getX() == otherPos.getX() && blockPos.getZ() == otherPos.getZ() && blockPos.getY() - 1 == otherPos.getY())
             {
                 BlockState below = level.getBlockState(otherPos);
-                if (below.getBlock() instanceof GateBlock || below.getBlock() instanceof GateBlock_V2)
+                if (below.getBlock() instanceof GateBlock || below.getBlock() instanceof GateRaisedBlock)
                 {
                     if (blockState.getValue(FACING) != below.getValue(FACING) || blockState.getValue(IN_WALL) != below.getValue(IN_WALL))
                     {
@@ -147,7 +147,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! other.getBlock().equals(FenceOnASlabBlock.technical()) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
+                    if (! other.isAir() && ! other.is(BlockTags.FENCES) && ! other.is(BlockTags.WALLS) && ! other.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES))
                     {
                         level.destroyBlock(blockPos, true);
                     }

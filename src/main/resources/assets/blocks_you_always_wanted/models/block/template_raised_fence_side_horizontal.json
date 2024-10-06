@@ -7,28 +7,28 @@
 	"elements": [
 		{
 			"name": "horizontal top bar",
-			"from": [7, 20, 0],
-			"to": [9, 23, 9],
+			"from": [7, 4, 0],
+			"to": [9, 7, 9],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
 			"faces": {
-				"north": {"uv": [7, 1, 9, 4], "texture": "#fence", "cullface": "north"},
+				"north": {"uv": [7, 1, 9, 4], "texture": "#fence"},
 				"east": {"uv": [0, 1, 9, 4], "texture": "#fence"},
 				"west": {"uv": [0, 1, 9, 4], "texture": "#fence"},
-				"up": {"uv": [7, 0, 9, 9], "texture": "#fence"},
-				"down": {"uv": [7, 0, 9, 9], "texture": "#fence"}
+				"up": {"uv": [7, 0, 16, 2], "rotation": 90, "texture": "#fence"},
+				"down": {"uv": [7, 0, 16, 2], "rotation": 90, "texture": "#fence"}
 			}
 		},
 		{
 			"name": "horizontal lower bar",
-			"from": [7, 14, 0],
-			"to": [9, 17, 9],
+			"from": [7, -2, 0],
+			"to": [9, 1, 9],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
 			"faces": {
-				"north": {"uv": [7, 7, 9, 10], "texture": "#fence", "cullface": "north"},
-				"east": {"uv": [0, 7, 9, 10], "texture": "#fence"},
-				"west": {"uv": [0, 7, 9, 10], "texture": "#fence"},
-				"up": {"uv": [7, 0, 9, 9], "texture": "#fence"},
-				"down": {"uv": [7, 0, 9, 9], "texture": "#fence"}
+				"north": {"uv": [7, 7, 9, 10], "texture": "#fence"},
+				"east": {"uv": [3, 9, 12, 12], "texture": "#fence"},
+				"west": {"uv": [7, 9, 16, 12], "texture": "#fence"},
+				"up": {"uv": [7, 0, 16, 2], "rotation": 90, "texture": "#fence"},
+				"down": {"uv": [7, 0, 16, 2], "rotation": 90, "texture": "#fence"}
 			}
 		}
 	]

@@ -165,7 +165,7 @@ public class GateBlock extends HorizontalDirectionalBlock
             {
                 return InteractionResult.FAIL;
             }
-            blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState).setValue(GateBlock_V2.BLOCK_BELOW, GateBlock.railToStateIndex(player.getMainHandItem().getItem()));
+            blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState).setValue(GateRaisedBlock.BLOCK_BELOW, GateBlock.railToStateIndex(player.getMainHandItem().getItem()));
             level.setBlock(blockPos, blockState, 11);
             level.playSound(player, blockPos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
             if (! player.isCreative())
@@ -232,8 +232,7 @@ public class GateBlock extends HorizontalDirectionalBlock
                 if (onSide) // don't check front of gate
                 {
                     BlockState other = level.getBlockState(otherPos);
-                    if ((other.is(BlockTags.SLABS) && other.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM))
-                        || other.getBlock() instanceof FenceOnASlabBlock)
+                    if (other.is(BlockTags.SLABS) && other.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM))
                     {
                         // allow lower slabs
                         blockState = GateBlock.toRaisedGate(blockState.getBlock()).withPropertiesOf(blockState);
@@ -271,13 +270,13 @@ public class GateBlock extends HorizontalDirectionalBlock
         }
         BlockPos otherPos = blockPos.relative(blockState.getValue(FACING).getClockWise());
         BlockState other = level.getBlockState(otherPos);
-        if (other.is(BlockTags.SLABS) || other.getBlock() instanceof FenceOnASlabBlock)
+        if (other.is(BlockTags.SLABS))
         {
             this.neighborChanged(blockState, level, blockPos, other.getBlock(), otherPos, true);
         }
         otherPos = blockPos.relative(blockState.getValue(FACING).getCounterClockWise());
         other = level.getBlockState(otherPos);
-        if (other.is(BlockTags.SLABS) || other.getBlock() instanceof FenceOnASlabBlock)
+        if (other.is(BlockTags.SLABS))
         {
             this.neighborChanged(blockState, level, blockPos, other.getBlock(), otherPos, true);
         }
@@ -353,17 +352,17 @@ public class GateBlock extends HorizontalDirectionalBlock
 
     public static int railToStateIndex(Item rail)
     {
-        if (rail.equals(Items.POWERED_RAIL)) return GateBlock_V2.ON_POWERED_RAIL;
-        if (rail.equals(Items.RAIL)) return GateBlock_V2.ON_REGULAR_RAIL;
+        if (rail.equals(Items.POWERED_RAIL)) return GateRaisedBlock.ON_POWERED_RAIL;
+        if (rail.equals(Items.RAIL)) return GateRaisedBlock.ON_REGULAR_RAIL;
         return 0;
     }
 
     public static int blockToStateIndex(Block block)
     {
-        if (block.equals(Blocks.SMOOTH_STONE_SLAB)) return GateBlock_V2.ON_STONE_SLAB;
-        if (block instanceof SlabBlock) return GateBlock_V2.ON_WOODEN_SLAB;
-        if (block.equals(Blocks.RAIL)) return GateBlock_V2.ON_REGULAR_RAIL;
-        if (block.equals(Blocks.POWERED_RAIL)) return GateBlock_V2.ON_POWERED_RAIL;
+        if (block.equals(Blocks.SMOOTH_STONE_SLAB)) return GateRaisedBlock.ON_STONE_SLAB;
+        if (block instanceof SlabBlock) return GateRaisedBlock.ON_WOODEN_SLAB;
+        if (block.equals(Blocks.RAIL)) return GateRaisedBlock.ON_REGULAR_RAIL;
+        if (block.equals(Blocks.POWERED_RAIL)) return GateRaisedBlock.ON_POWERED_RAIL;
         return 0;
     }
     public static int blockToStateIndex(Block block1, Block block2)

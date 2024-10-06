@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GateBlock_V2 extends HorizontalDirectionalBlock
+public class GateRaisedBlock extends HorizontalDirectionalBlock
 {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -68,12 +68,12 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     private final SoundEvent closeSound;
     private final Block matchingSlab;
 
-    public GateBlock_V2(Block original, Block slab, WoodType woodType)
+    public GateRaisedBlock(Block original, Block slab, WoodType woodType)
     {
         this(Properties.copy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose(), slab);
     }
 
-    public GateBlock_V2(Properties properties, SoundEvent openSound, SoundEvent closeSound, Block slab)
+    public GateRaisedBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound, Block slab)
     {
         super(properties);
         this.openSound = openSound;
@@ -274,10 +274,10 @@ public class GateBlock_V2 extends HorizontalDirectionalBlock
     {
         BlockState blockStateMaybeRail = level.getBlockState(blockPos.relative(facing));
         if (blockStateMaybeRail.getBlock() instanceof PoweredRailBlock && blockStateMaybeRail.getValue(PoweredRailBlock.POWERED)) { return true; }
-        if (blockStateMaybeRail.getBlock() instanceof GateBlock_V2 && blockStateMaybeRail.getValue(GateBlock_V2.POWERED)) { return true; }
+        if (blockStateMaybeRail.getBlock() instanceof GateRaisedBlock && blockStateMaybeRail.getValue(GateRaisedBlock.POWERED)) { return true; }
         blockStateMaybeRail = level.getBlockState(blockPos.relative(facing.getOpposite()));
         if (blockStateMaybeRail.getBlock() instanceof PoweredRailBlock && blockStateMaybeRail.getValue(PoweredRailBlock.POWERED)) { return true; }
-        if (blockStateMaybeRail.getBlock() instanceof GateBlock_V2 && blockStateMaybeRail.getValue(GateBlock_V2.POWERED)) { return true; }
+        if (blockStateMaybeRail.getBlock() instanceof GateRaisedBlock && blockStateMaybeRail.getValue(GateRaisedBlock.POWERED)) { return true; }
         return false;
     }
 

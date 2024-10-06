@@ -1,4 +1,4 @@
-package moonfather.blocks_you_always_wanted.blocks;
+package moonfather.blocks_you_always_wanted.blocks.obsolete;
 
 import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
-public class FenceOnASlabBlock extends FenceBlock
+class FenceOnASlabBlock extends FenceBlock
 {
     public FenceOnASlabBlock(Block original)
     {

@@ -2,9 +2,8 @@ package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.MainConfig;
-import moonfather.blocks_you_always_wanted.blocks.FenceOnASlabBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
-import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
+import moonfather.blocks_you_always_wanted.blocks.GateRaisedBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateTechnicalBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -28,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber
-public class OtherEvents
+public class OtherGateEvents
 {
     @SubscribeEvent
     public static void onFurnaceCheck(FurnaceFuelBurnTimeEvent event)
@@ -91,16 +89,16 @@ public class OtherEvents
             {
                 temp1.move(event.getEntity().getDirection().getClockWise());
                 BlockState side = event.getLevel().getBlockState(temp1);
-                boolean ok = side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.getBlock().equals(FenceOnASlabBlock.technical()) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES);
+                boolean ok = side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES);
                 temp1.move(event.getEntity().getDirection().getCounterClockWise(), 2);
                 side = event.getLevel().getBlockState(temp1);
-                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.getBlock().equals(FenceOnASlabBlock.technical()) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES);
+                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES);
                 temp1.move(Direction.DOWN);
                 side = event.getLevel().getBlockState(temp1);
-                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.getBlock().equals(FenceOnASlabBlock.technical()) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM));
+                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && (! side.hasProperty(SlabBlock.TYPE) || side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM)));
                 temp1.move(event.getEntity().getDirection().getClockWise(), 2);
                 side = event.getLevel().getBlockState(temp1);
-                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.getBlock().equals(FenceOnASlabBlock.technical()) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM));
+                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && (! side.hasProperty(SlabBlock.TYPE) || side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM)));
                 if (! ok)
                 {
                     event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_NO_ROOM_SIDE, true);
@@ -133,28 +131,28 @@ public class OtherEvents
             BlockState adjacent;
             adjacent = event.getLevel().getBlockState(temp.move(Direction.NORTH));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.SOUTH);
-            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.EAST) || adjacent.getValue(GateBlock.FACING).equals(Direction.WEST)))
+            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateRaisedBlock) && (adjacent.getValue(GateBlock.FACING).equals(Direction.EAST) || adjacent.getValue(GateBlock.FACING).equals(Direction.WEST)))
             {
                 event.setUseItem(Event.Result.DENY);
                 return;
             }
             adjacent = event.getLevel().getBlockState(temp.move(Direction.WEST));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.EAST);
-            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.NORTH) || adjacent.getValue(GateBlock.FACING).equals(Direction.SOUTH)))
+            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateRaisedBlock) && (adjacent.getValue(GateBlock.FACING).equals(Direction.NORTH) || adjacent.getValue(GateBlock.FACING).equals(Direction.SOUTH)))
             {
                 event.setUseItem(Event.Result.DENY);
                 return;
             }
             adjacent = event.getLevel().getBlockState(temp.move(Direction.EAST));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.WEST);
-            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.NORTH) || adjacent.getValue(GateBlock.FACING).equals(Direction.SOUTH)))
+            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateRaisedBlock) && (adjacent.getValue(GateBlock.FACING).equals(Direction.NORTH) || adjacent.getValue(GateBlock.FACING).equals(Direction.SOUTH)))
             {
                 event.setUseItem(Event.Result.DENY);
                 return;
             }
             adjacent = event.getLevel().getBlockState(temp.move(Direction.SOUTH));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.NORTH);
-            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateBlock_V2) && (adjacent.getValue(GateBlock.FACING).equals(Direction.EAST) || adjacent.getValue(GateBlock.FACING).equals(Direction.WEST)))
+            if ((adjacent.getBlock() instanceof GateBlock || adjacent.getBlock() instanceof GateRaisedBlock) && (adjacent.getValue(GateBlock.FACING).equals(Direction.EAST) || adjacent.getValue(GateBlock.FACING).equals(Direction.WEST)))
             {
                 event.setUseItem(Event.Result.DENY);
                 //return;

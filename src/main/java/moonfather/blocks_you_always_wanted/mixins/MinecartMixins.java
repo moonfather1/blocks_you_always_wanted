@@ -1,6 +1,6 @@
 package moonfather.blocks_you_always_wanted.mixins;
 
-import moonfather.blocks_you_always_wanted.blocks.GateBlock_V2;
+import moonfather.blocks_you_always_wanted.blocks.GateRaisedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -37,7 +37,7 @@ public abstract class MinecartMixins extends Entity
 
         BlockPos blockPos = new BlockPos(x, y, z);
         BlockState blockState = this.level().getBlockState(blockPos); // copied part done.
-        if (! (blockState.getBlock() instanceof GateBlock_V2))
+        if (! (blockState.getBlock() instanceof GateRaisedBlock))
         {
             return;
         }
@@ -54,7 +54,7 @@ public abstract class MinecartMixins extends Entity
         this.setDeltaMovement(deltaMovement);
 
         // now powered rail handling
-        if (blockState.getValue(GateBlock_V2.BLOCK_BELOW).equals(GateBlock_V2.ON_POWERED_RAIL) && blockState.getValue(GateBlock_V2.POWERED))
+        if (blockState.getValue(GateRaisedBlock.BLOCK_BELOW).equals(GateRaisedBlock.ON_POWERED_RAIL) && blockState.getValue(GateRaisedBlock.POWERED))
         {
             Vec3 delta = this.getDeltaMovement();
             double horizontalDistance = delta.horizontalDistance();
@@ -66,7 +66,7 @@ public abstract class MinecartMixins extends Entity
             {
                 double dx = delta.x;
                 double dz = delta.z;
-                if (blockState.getValue(GateBlock_V2.FACING).getAxis().equals(Direction.Axis.X))
+                if (blockState.getValue(GateRaisedBlock.FACING).getAxis().equals(Direction.Axis.X))
                 {
                     dx = Math.signum(dx) * 0.02D;
                 }
