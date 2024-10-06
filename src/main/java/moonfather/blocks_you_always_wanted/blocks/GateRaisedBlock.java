@@ -228,11 +228,13 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
             }
             // signal
             boolean hasPowerThroughRails = this.hasPowerThroughRails(level, blockPos, blockState.getValue(FACING));
-            boolean hasNeighborSignal = level.hasNeighborSignal(blockPos);
-            if ((blockState.getValue(PROVIDES_RAIL_POWER) != hasNeighborSignal) || (blockState.getValue(POWERED) != hasNeighborSignal || hasPowerThroughRails) || (blockState.getValue(OPEN) != hasNeighborSignal))
+            boolean hasNeighborSignal = level.hasNeighborSignal(blockPos); //todo test dete
+            if ((blockState.getValue(PROVIDES_RAIL_POWER) != hasNeighborSignal) || (blockState.getValue(POWERED) != (hasNeighborSignal || hasPowerThroughRails)))
             {
-                level.setBlock(blockPos, blockState.setValue(POWERED, hasNeighborSignal || hasPowerThroughRails).setValue(OPEN, hasNeighborSignal).setValue(PROVIDES_RAIL_POWER, hasNeighborSignal), 3);
-                if (blockState.getValue(OPEN) != hasNeighborSignal)
+                boolean previouslyHadNeighborSignal = blockState.getValue(PROVIDES_RAIL_POWER);
+                boolean shouldBeOpen = hasNeighborSignal != previouslyHadNeighborSignal ? hasNeighborSignal : blockState.getValue(OPEN);
+                level.setBlock(blockPos, blockState.setValue(POWERED, hasNeighborSignal || hasPowerThroughRails).setValue(OPEN, shouldBeOpen).setValue(PROVIDES_RAIL_POWER, hasNeighborSignal), 3);
+                if (blockState.getValue(OPEN) != shouldBeOpen)
                 {
                     level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
                     level.gameEvent((Entity)null, hasNeighborSignal ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
