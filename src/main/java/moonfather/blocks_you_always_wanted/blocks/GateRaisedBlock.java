@@ -385,6 +385,11 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
         return GateBlock.fromRaisedGate(state.getBlock()).asItem().getDefaultInstance();
     }
 
+    public boolean isOnRail(BlockState state)
+    {
+        return state.getValue(GateRaisedBlock.BLOCK_BELOW) == ON_POWERED_RAIL || state.getValue(GateRaisedBlock.BLOCK_BELOW) == ON_REGULAR_RAIL;
+    }
+
     /////////////////////////////////////////////////////
 
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }

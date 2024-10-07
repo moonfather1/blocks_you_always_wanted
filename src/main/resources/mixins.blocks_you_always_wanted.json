@@ -6,7 +6,8 @@
   "mixins": [
     "FenceMixins",
     "MinecartMixins",
-    "PoweredRailMixins"
+    "PoweredRailMixins",
+    "RailStateMixins"
   ],
   "client": [
   ],
