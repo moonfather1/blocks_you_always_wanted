@@ -1,8 +1,8 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
+import moonfather.blocks_you_always_wanted.initialization.config.StartupConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.ItemTags;
@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -28,7 +27,7 @@ public class TransformFenceEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
-        if (! MainConfig.COMMON.FencesEnabled.get())
+        if (! StartupConfig.fencesEnabled())
         {
             return; // todo: don't register event on 1.21
         }

@@ -1,10 +1,9 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
+import moonfather.blocks_you_always_wanted.initialization.config.StartupConfig;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,9 +17,9 @@ public class ClientEvents
     @SubscribeEvent
     public static void onGateTooltip(ItemTooltipEvent event)
     {
-        if (! MainConfig.COMMON.GatesEnabled.get())
+        if (! StartupConfig.wideGatesEnabled())
         {
-            return; // todo: don't register event on 1.21
+            return;   // todo: don't register when startup config is added
         }
         if (event.getEntity() != null && event.getItemStack().is(ItemTags.FENCE_GATES))
         {

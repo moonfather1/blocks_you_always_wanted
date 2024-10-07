@@ -1,10 +1,10 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateRaisedBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateTechnicalBlock;
+import moonfather.blocks_you_always_wanted.initialization.config.StartupConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -44,9 +44,9 @@ public class OtherGateEvents
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlaceGate(BlockEvent.EntityPlaceEvent event)
     {
-        if (! MainConfig.COMMON.GatesEnabled.get())
+        if (! StartupConfig.wideGatesEnabled())
         {
-            return; // todo: don't register event on 1.21
+            return; // todo: don't register event when startup config gets added
         }
         if (event.getPlacedBlock().is(BlockTags.FENCE_GATES))
         {

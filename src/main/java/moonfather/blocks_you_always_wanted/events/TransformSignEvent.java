@@ -1,8 +1,8 @@
 package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
-import moonfather.blocks_you_always_wanted.MainConfig;
 import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
+import moonfather.blocks_you_always_wanted.initialization.config.StartupConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,7 +26,7 @@ public class TransformSignEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
-        if (! MainConfig.COMMON.HangingSignsEnabled.get())
+        if (! StartupConfig.signsEnabled())
         {
             return; // todo: don't register event on 1.21
         }

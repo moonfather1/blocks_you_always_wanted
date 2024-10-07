@@ -1,6 +1,7 @@
 package moonfather.blocks_you_always_wanted;
 
 import com.google.gson.JsonObject;
+import moonfather.blocks_you_always_wanted.initialization.config.StartupConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -27,15 +28,15 @@ public class OptionalRecipeCondition implements ICondition
 	{
 		if (this.flagCode.equals("hanging_signs_enabled"))
 		{
-			return MainConfig.COMMON.HangingSignsEnabled.get();
+			return StartupConfig.signsEnabled();
 		}
 		else if (this.flagCode.equals("gates_enabled"))
 		{
-			return MainConfig.COMMON.GatesEnabled.get();
+			return StartupConfig.wideGatesEnabled();
 		}
 		else if (this.flagCode.equals("fences_enabled"))
 		{
-			return MainConfig.COMMON.FencesEnabled.get();
+			return StartupConfig.fencesEnabled();
 		}
 		else
 		{
