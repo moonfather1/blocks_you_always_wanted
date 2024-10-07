@@ -26,7 +26,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 @EventBusSubscriber
 public class TransformGateEvent
 {
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onInteract(PlayerInteractEvent.RightClickBlock event)
     {
         if (! (event.getItemStack().getItem() instanceof BlockItem bi))
