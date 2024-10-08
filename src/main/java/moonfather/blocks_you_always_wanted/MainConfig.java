@@ -17,6 +17,10 @@ public class MainConfig
 
 		public Common(ModConfigSpec.Builder builder)
 		{
+			builder.push("An explanation about this config file");
+			ModConfigSpec.ConfigValue<String> Dummy = builder.comment("This line is just an explanation of this uncommon config system. Config is implemented like this because normal config can not be used to not-register blocks. Registration happens before pretty-much-anything. Never mind the details, we have one limitation to go through: THIS FILE MUST BE THE SAME ON CLIENT AND SERVER SIDE. There is no synchronization. If you want to turn fences off, that is fine, but it must be done on the server and all clients.")
+										.define("dummy option", "just a placeholder for the comment");
+			builder.pop();
 			builder.push("Block types");
 			this.HangingSignsEnabled = builder.comment("Enables hanging signs that display items. if you turn this off, existing signs may disappear.")
 					.define("Hanging signs enabled", defaultHangingSignsEnabled);
