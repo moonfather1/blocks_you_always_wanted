@@ -13,5 +13,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "refmap": "mixins.blocks_you_always_wanted.refmap.json"
 }

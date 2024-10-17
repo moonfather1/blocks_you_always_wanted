@@ -10,7 +10,7 @@ version = mod_version
 group = mod_group_id
 
 base {
-    archivesName = "$mod_id--mc$minecraft_version-"
+    archivesName = "$mod_id--forge--mc$minecraft_version-"
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -166,6 +166,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	
     // Runtime mods for testing
     runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:5159287")
     // bad ver runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:5224387")
