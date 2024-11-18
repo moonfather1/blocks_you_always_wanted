@@ -80,7 +80,7 @@ public class OtherGateEvents
                 BlockState existing = event.getLevel().getBlockState(event.getPos());
                 if (! (event.getFace().equals(Direction.UP) && (existing.is(BlockTags.SLABS) || existing.is(Blocks.RAIL) || existing.is(Blocks.POWERED_RAIL))))
                 {
-                    if (! existing.canBeReplaced())
+                    if (! existing.getMaterial().isReplaceable())
                     {
                         temp1.move(event.getFace()); // not empty space? move position.
                     }
@@ -89,7 +89,7 @@ public class OtherGateEvents
             // check if there is room for tech block above the gate
             temp1.move(Direction.UP);
             BlockState above = event.getLevel().getBlockState(temp1);
-            if (! above.isAir() && ! above.canBeReplaced())
+            if (! above.isAir() && ! above.getMaterial().isReplaceable())
             {
                 event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_NO_ROOM, true);
                 event.setCanceled(true);
@@ -139,7 +139,7 @@ public class OtherGateEvents
             }
             BlockPos.MutableBlockPos temp = new BlockPos.MutableBlockPos();
             temp.set(event.getPos()); // target
-            if (! event.getLevel().getBlockState(event.getPos()).canBeReplaced() && event.getFace() != null) { temp.move(event.getFace()); } // empty space?
+            if (! event.getLevel().getBlockState(event.getPos()).getMaterial().isReplaceable() && event.getFace() != null) { temp.move(event.getFace()); } // empty space?
             BlockState adjacent;
             adjacent = event.getLevel().getBlockState(temp.move(Direction.NORTH));
             if (adjacent.getBlock() instanceof GateTechnicalBlock) { adjacent = event.getLevel().getBlockState(temp.move(Direction.DOWN)); temp.move(Direction.UP); }  temp.move(Direction.SOUTH);

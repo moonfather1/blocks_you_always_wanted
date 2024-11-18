@@ -14,7 +14,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +23,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -39,7 +38,7 @@ public class FenceMainBlock extends FenceBlock
 {
     public FenceMainBlock(Block original)
     {
-        super(Properties.copy(original).lightLevel(FenceMainBlock::getLightLevel));
+        super(Properties.copy(original).lightLevel(FenceMainBlock::getLightLevel).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, Boolean.FALSE).setValue(EAST, Boolean.FALSE).setValue(SOUTH, Boolean.FALSE).setValue(WEST, Boolean.FALSE).setValue(NORTH_DOWN, Boolean.FALSE).setValue(EAST_DOWN, Boolean.FALSE).setValue(SOUTH_DOWN, Boolean.FALSE).setValue(WEST_DOWN, Boolean.FALSE).setValue(NORTH_UP, Boolean.FALSE).setValue(EAST_UP, Boolean.FALSE).setValue(SOUTH_UP, Boolean.FALSE).setValue(WEST_UP, Boolean.FALSE).setValue(WATERLOGGED, Boolean.FALSE).setValue(TOP_VARIANT, 0));
         this.original = (FenceBlock) original;
         if (collisionShapes == null)
@@ -171,10 +170,11 @@ public class FenceMainBlock extends FenceBlock
 
     //-------------------------------------------------------------------------
 
+
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder params)
+    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder p_60538_)
     {
-        List<ItemStack> result = original.defaultBlockState().getDrops(params);
+        List<ItemStack> result = original.defaultBlockState().getDrops(p_60538_);
         ItemStack drop = stateToItem(blockState.getValue(TOP_VARIANT));
         if (! drop.isEmpty())
         {

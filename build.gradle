@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.minecraftforge.gradle' version '5.1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
@@ -44,7 +44,7 @@ minecraft {
     // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
     // It is REQUIRED to be set to true for this template to function.
     // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-    copyIdeResources = true
+    //  copyIdeResources = true
 
     // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
     // The folder name can be set on a run configuration using the "folderName" property.
@@ -63,7 +63,7 @@ minecraft {
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('../run1201')
+            workingDirectory project.file('../run1192')
 
             // Recommended logging data for a userdev environment
             // The markers can be added/remove as needed separated by commas.
@@ -88,7 +88,7 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('../run1201')
+            workingDirectory project.file('../run1192')
 
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -107,7 +107,7 @@ minecraft {
         // By default, the server will crash when no gametests are provided.
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
-            workingDirectory project.file('../run1201')
+            workingDirectory project.file('../run1192')
 
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -123,7 +123,7 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file('../run1201')
+            workingDirectory project.file('../run1192')
 
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -169,20 +169,6 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	
     // Runtime mods for testing
-    runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:5159287")
-    // bad ver runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:5224387")
-
-    // Runtime mods for testing, pick one
-    //runtimeOnly fg.deobf("curse.maven:jei-238222:5533463")
-    //runtimeOnly fg.deobf("curse.maven:emi-580555:5311316")
-    //5497473
-    runtimeOnly fg.deobf("maven.modrinth:emi:ShejnJfY")
-
-    // Nice thing that shows the nbt in scrollable manner
-    runtimeOnly fg.deobf("curse.maven:item-nbt-viewer-514135:4578522")
-
-    runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628675")
-    runtimeOnly fg.deobf("curse.maven:packing-tape-238659:4574130")
 }
 
 

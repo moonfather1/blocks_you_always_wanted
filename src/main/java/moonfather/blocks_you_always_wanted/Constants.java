@@ -15,6 +15,7 @@ public class Constants
     public static class ItemTags
     {
         public static final TagKey<Item> GC_WAX = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("growthcraft_apiary:bees_wax"));
+        public static final TagKey<Item> FENCE_GATES = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("minecraft:fence_gates"));;
     }
 
     public static class BlockTags

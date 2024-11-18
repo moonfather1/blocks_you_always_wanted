@@ -30,13 +30,13 @@ public abstract class MinecartMixins extends Entity
         int x = Mth.floor(this.getX());  // copied part; change to mixin extras in nf 1.21 and fab
         int y = Mth.floor(this.getY());
         int z = Mth.floor(this.getZ());
-        if (this.level().getBlockState(new BlockPos(x, y - 1, z)).is(BlockTags.FENCE_GATES))
+        if (this.level.getBlockState(new BlockPos(x, y - 1, z)).is(BlockTags.FENCE_GATES))
         {
             y--;
         }
 
         BlockPos blockPos = new BlockPos(x, y, z);
-        BlockState blockState = this.level().getBlockState(blockPos); // copied part done.
+        BlockState blockState = this.level.getBlockState(blockPos); // copied part done.
         if (! (blockState.getBlock() instanceof GateRaisedBlock))
         {
             return;

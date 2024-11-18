@@ -26,11 +26,7 @@ public class OptionalRecipeCondition implements ICondition
 	@Override
 	public boolean test(IContext context)
 	{
-		if (this.flagCode.equals("hanging_signs_enabled"))
-		{
-			return StartupConfig.signsEnabled();
-		}
-		else if (this.flagCode.equals("gates_enabled"))
+		if (this.flagCode.equals("gates_enabled"))
 		{
 			return StartupConfig.wideGatesEnabled();
 		}

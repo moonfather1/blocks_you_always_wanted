@@ -4,7 +4,6 @@ import moonfather.blocks_you_always_wanted.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,7 +22,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -65,22 +64,31 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
         public static final VoxelShape Z_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(-4.0D, 3.0D, 7.0D, -2.0D, 26.0D, 9.0D), Block.box(18.0D, 3.0D, 7.0D, 20.0D, 26.0D, 9.0D));
         public static final VoxelShape X_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(7.0D, 5.0D, -4.0D, 9.0D, 26.0D, -2.0D), Block.box(7.0D, 3.0D, 18.0D, 9.0D, 26.0D, 20.0D));
     }
-    private final SoundEvent openSound;
-    private final SoundEvent closeSound;
+
     private final Block matchingSlab;
 
     public GateRaisedBlock(Block original, Block slab, WoodType woodType)
     {
-        this(Properties.copy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose(), slab);
+        this(Properties.copy(original).sound(SoundType.WOOD).noOcclusion(), slab);
     }
 
-    public GateRaisedBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound, Block slab)
+    public GateRaisedBlock(Properties properties, Block slab)
     {
         super(properties);
-        this.openSound = openSound;
-        this.closeSound = closeSound;
         this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.FALSE).setValue(POWERED, Boolean.FALSE).setValue(PROVIDES_RAIL_POWER, Boolean.FALSE).setValue(IN_WALL, Boolean.FALSE));
         this.matchingSlab = slab;
+    }
+
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isOcclusionShapeFullBlock(BlockState p_222959_, BlockGetter p_222960_, BlockPos p_222961_)
+    {
+        return false;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -208,7 +216,8 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
             level.setBlock(blockPos, blockState, Block.UPDATE_ALL_IMMEDIATE);
         }
         boolean flag = blockState.getValue(OPEN);
-        level.playSound(player, blockPos, flag ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+//        level.playSound(player, blockPos, flag ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+        level.levelEvent(player, flag ? 1008 : 1014, blockPos, 0);
         level.gameEvent(player, flag ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -237,7 +246,8 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
                 level.setBlock(blockPos, blockState.setValue(POWERED, hasNeighborSignal || hasPowerThroughRails).setValue(OPEN, shouldBeOpen).setValue(PROVIDES_RAIL_POWER, hasNeighborSignal), 3);
                 if (blockState.getValue(OPEN) != shouldBeOpen)
                 {
-                    level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+//                    level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+                    level.levelEvent((Player)null, hasNeighborSignal ? 1008 : 1014, blockPos, 0);
                     level.gameEvent((Entity)null, hasNeighborSignal ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
                 }
             }
@@ -342,10 +352,11 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder)
+    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder p_60538_)
     {
-        List<ItemStack> result = super.getDrops(blockState, builder);
+        List<ItemStack> result = super.getDrops(blockState, p_60538_);
         int itemIndex = blockState.getValue(BLOCK_BELOW);
         if (itemIndex == ON_WOODEN_SLAB) result.add(this.matchingSlab.asItem().getDefaultInstance());
         if (itemIndex == ON_STONE_SLAB) result.add(Items.SMOOTH_STONE_SLAB.getDefaultInstance());

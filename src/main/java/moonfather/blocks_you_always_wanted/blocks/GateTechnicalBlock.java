@@ -17,7 +17,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
@@ -47,7 +48,7 @@ public class GateTechnicalBlock extends HorizontalDirectionalBlock
 
     public GateTechnicalBlock()
     {
-        super(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(2.0F, 3.0F).noParticlesOnBreak());
+        super(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(IN_WALL, Boolean.FALSE));
     }
 

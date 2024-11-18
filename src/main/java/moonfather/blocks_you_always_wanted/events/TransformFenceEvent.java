@@ -56,7 +56,7 @@ public class TransformFenceEvent
                 return;
             }
             BlockPos above = event.getHitVec().getBlockPos().above();
-            if (! event.getLevel().getBlockState(above).canBeReplaced())
+            if (! event.getLevel().getBlockState(above).getMaterial().isReplaceable())
             {
                 event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_NO_ROOM, true);
                 event.setCancellationResult(InteractionResult.FAIL);

@@ -17,11 +17,6 @@ public class StartupConfig
         return getStored().wide_gates_enabled;
     }
 
-    public static boolean signsEnabled()
-    {
-        return getStored().hanging_signs_enabled;
-    }
-
     public static boolean fencesEnabled()
     {
         return getStored().fences_enabled;
@@ -74,7 +69,6 @@ public class StartupConfig
     private static class StoredConfig
     {
         public String about_this_file = "This line is just an explanation of this uncommon config system. Config is implemented like this because normal config can not be used to not-register blocks. Registration happens before pretty-much-anything. Never mind the details, we have one limitation to go through: THIS FILE MUST BE THE SAME ON CLIENT AND SERVER SIDE. There is no synchronization. If you want to turn fences off, that is fine, but it must be done on the server and all clients.";
-        public boolean hanging_signs_enabled = true;
         public boolean fences_enabled = true;
         public boolean wide_gates_enabled = true;
     }

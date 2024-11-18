@@ -5,7 +5,6 @@ import moonfather.blocks_you_always_wanted.initialization.RegistrationManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -58,21 +57,18 @@ public class GateBlock extends HorizontalDirectionalBlock
         public static final VoxelShape Z_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(-4.0D, 3.0D, 7.0D, -2.0D, 16.0D, 9.0D), Block.box(18.0D, 3.0D, 7.0D, 20.0D, 16.0D, 9.0D));
         public static final VoxelShape X_OCCLUSION_SHAPE_NARROW = Shapes.or(Block.box(7.0D, 5.0D, -4.0D, 9.0D, 16.0D, -2.0D), Block.box(7.0D, 3.0D, 18.0D, 9.0D, 16.0D, 20.0D));
     }
-    private final net.minecraft.sounds.SoundEvent openSound;
-    private final net.minecraft.sounds.SoundEvent closeSound;
+
     private Block original = null;
 
     public GateBlock(Block original, WoodType woodType)
     {
-        this(Properties.copy(original).sound(woodType.soundType()), woodType.fenceGateOpen(), woodType.fenceGateClose());
+        this(Properties.copy(original).sound(SoundType.WOOD).noOcclusion());
         this.original = original;
     }
 
-    public GateBlock(Properties properties, SoundEvent openSound, SoundEvent closeSound)
+    public GateBlock(Properties properties)
     {
         super(properties);
-        this.openSound = openSound;
-        this.closeSound = closeSound;
         this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.FALSE).setValue(POWERED, Boolean.FALSE).setValue(IN_WALL, Boolean.FALSE));
     }
 
@@ -192,7 +188,8 @@ public class GateBlock extends HorizontalDirectionalBlock
             level.setBlock(blockPos, blockState, 10);
         }
         boolean flag = blockState.getValue(OPEN);
-        level.playSound(player, blockPos, flag ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+        //level.playSound(player, blockPos, flag ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+        level.levelEvent(player, flag ? 1008 : 1014, blockPos, 0);
         level.gameEvent(player, flag ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -220,7 +217,8 @@ public class GateBlock extends HorizontalDirectionalBlock
                 level.setBlock(blockPos, blockState.setValue(POWERED, hasNeighborSignal).setValue(OPEN, hasNeighborSignal), 2);
                 if (blockState.getValue(OPEN) != hasNeighborSignal)
                 {
-                    level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+//                    level.playSound((Player)null, blockPos, hasNeighborSignal ? this.openSound : this.closeSound, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+                    level.levelEvent((Player)null, hasNeighborSignal ? 1008 : 1014, blockPos, 0);
                     level.gameEvent((Entity)null, hasNeighborSignal ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
                 }
             }
