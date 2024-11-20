@@ -43,10 +43,10 @@ public class GateRaisedBlock extends HorizontalDirectionalBlock
     {
         public static final VoxelShape EMPTY = Shapes.empty();
         public static final VoxelShape JUST_SLAB = Block.box(0, 0, 0, 16, 8, 16);
-        public static final VoxelShape Z_SHAPE = Block.box(-5.0D, 9.0D, 6.0D, 21.0D, 27.0D, 10.0D);
-        public static final VoxelShape X_SHAPE = Block.box(6.0D, 9.0D, -5.0D, 10.0D, 27.0D, 21.0D);
-        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, 9.0D, 6.0D, 20.0D, 27.0D, 10.0D);
-        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 9.0D, -4.0D, 10.0D, 27.0D, 20.0D);
+        public static final VoxelShape Z_SHAPE = Block.box(-5.0D, 8.0D, 6.0D, 21.0D, 26.0D, 10.0D);
+        public static final VoxelShape X_SHAPE = Block.box(6.0D, 8.0D, -5.0D, 10.0D, 26.0D, 21.0D);
+        public static final VoxelShape Z_SHAPE_NARROW = Block.box(-4.0D, 8.0D, 6.0D, 20.0D, 26.0D, 10.0D);
+        public static final VoxelShape X_SHAPE_NARROW = Block.box(6.0D, 8.0D, -4.0D, 10.0D, 26.0D, 20.0D);
         public static final VoxelShape Z_SHAPE_PLUS_SLAB = Shapes.or(Z_SHAPE, JUST_SLAB);
         public static final VoxelShape X_SHAPE_PLUS_SLAB = Shapes.or(X_SHAPE, JUST_SLAB);
         public static final VoxelShape Z_SHAPE_NARROW_PLUS_SLAB = Shapes.or(Z_SHAPE_NARROW, JUST_SLAB);

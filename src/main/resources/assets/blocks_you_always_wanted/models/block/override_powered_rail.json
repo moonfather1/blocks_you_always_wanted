@@ -1,4 +1,5 @@
 {
   "parent": "minecraft:block/powered_rail",
-  "render_type": "cutout_mipped"
+  "render_type": "cutout_mipped",
+  "ambientocclusion": false
 }
