@@ -31,6 +31,10 @@ public class OptionalRecipeCondition implements ICondition
 		{
 			return MainConfig.COMMON.FencesEnabled.get();
 		}
+		else if (this.flagCode.equals("paper_walls_enabled"))
+		{
+			return MainConfig.COMMON.WallsEnabled.get();
+		}
 		else
 		{
 			return false;

@@ -20,5 +20,7 @@
   "block.blocks_you_always_wanted.gate_main_spruce": "Wide gate (spruce)",
   "block.blocks_you_always_wanted.gate_spec_oak": "Wide gate (oak)",
   "block.blocks_you_always_wanted.gate_spec_spruce": "Wide gate (spruce)",
-  "block.blocks_you_always_wanted.gate_technical_block": "Wide gate"
+  "block.blocks_you_always_wanted.gate_technical_block": "Wide gate",
+  "block.blocks_you_always_wanted.shoji_main_wall": "Paper wall",
+  "block.blocks_you_always_wanted.shoji_main_cabinet": "Paper wall with cabinet"
 }

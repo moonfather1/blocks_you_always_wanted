@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "blocks_you_always_wanted:shoji_main_wall"
+    },
+    {
+      "tag": "c:chests"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "blocks_you_always_wanted:shoji_main_cabinet"
+  },
+  "conditions":
+  [
+    {
+      "type": "blocks_you_always_wanted:optional",
+      "flag_code": "paper_walls_enabled"
+    }
+  ]
+}

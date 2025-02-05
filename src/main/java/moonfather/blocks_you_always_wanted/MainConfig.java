@@ -8,12 +8,14 @@ public class MainConfig
 	public static class Common
 	{
 		private static final boolean defaultHangingSignsEnabled = true;
-		private static final boolean defaultFencesEnabled = true;
+		private static final boolean defaultFencesEnabled = false;
 		private static final boolean defaultGatesEnabled = true;
+		private static final boolean defaultWallsEnabled = true;
 
 		public final ModConfigSpec.ConfigValue<Boolean> HangingSignsEnabled;
 		public final ModConfigSpec.ConfigValue<Boolean> FencesEnabled;
 		public final ModConfigSpec.ConfigValue<Boolean> GatesEnabled;
+		public final ModConfigSpec.ConfigValue<Boolean> WallsEnabled;
 
 		public Common(ModConfigSpec.Builder builder)
 		{
@@ -25,9 +27,11 @@ public class MainConfig
 			this.HangingSignsEnabled = builder.comment("Enables hanging signs that display items. if you turn this off, existing signs may disappear.")
 					.define("Hanging signs enabled", defaultHangingSignsEnabled);
 			this.FencesEnabled = builder.comment("Enables placing fences onto slabs. if you turn this off, existing fences may disappear.")
-											  .define("Fences-on-slabs enabled", defaultFencesEnabled);
+					.define("Fences-on-slabs enabled", defaultFencesEnabled);
 			this.GatesEnabled = builder.comment("Enables wide gates. if you turn this off, existing gates may disappear.")
-											  .define("Wide gates enabled", defaultGatesEnabled);
+					.define("Wide gates enabled", defaultGatesEnabled);
+			this.WallsEnabled = builder.comment("Enables paper walls and sliding doors. if you turn this off, existing decor may disappear.")
+					.define("Paper walls enabled", defaultWallsEnabled);
 			builder.pop();
 		}
 	}

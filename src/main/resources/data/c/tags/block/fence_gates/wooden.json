@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "blocks_you_always_wanted:gate_main_oak",
-    "blocks_you_always_wanted:gate_main_spruce",
-    "blocks_you_always_wanted:gate_spec_oak",
-    "blocks_you_always_wanted:gate_spec_spruce"
+    { "id": "blocks_you_always_wanted:gate_main_oak", "required": false },
+    { "id": "blocks_you_always_wanted:gate_main_spruce", "required": false },
+    { "id": "blocks_you_always_wanted:gate_spec_oak", "required": false },
+    { "id": "blocks_you_always_wanted:gate_spec_spruce", "required": false }
   ]
 }

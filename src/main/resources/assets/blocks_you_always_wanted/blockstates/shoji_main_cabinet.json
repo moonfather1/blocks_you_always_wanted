@@ -1,0 +1,197 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_base"
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+	{
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_base",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+	{
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_base",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+	{
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_base",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+	
+	
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_bottom"
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_bottom",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_bottom",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_bottom",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+
+	
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_left"
+      },
+      "when": {
+        "facing": "north",
+		"horizontal": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_left",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+		"horizontal": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_left",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+		"horizontal": 0
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_left",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+		"horizontal": 0
+      }
+    },
+	
+	
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_right"
+      },
+      "when": {
+        "facing": "north",
+		"horizontal": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_right",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+		"horizontal": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_right",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+		"horizontal": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_right",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+		"horizontal": 2
+      }
+    },
+	
+	
+	
+	
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_cabinet"
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_cabinet",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_cabinet",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/shoji_wall_main_cabinet",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    }	
+  ]
+}

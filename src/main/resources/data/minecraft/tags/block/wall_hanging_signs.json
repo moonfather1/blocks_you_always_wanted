@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "blocks_you_always_wanted:hanging_sign_2_oak",
-    "blocks_you_always_wanted:hanging_sign_2_spruce"
+    { "id": "blocks_you_always_wanted:hanging_sign_2_oak", "required": false },
+    { "id": "blocks_you_always_wanted:hanging_sign_2_spruce", "required": false }
   ]
 }

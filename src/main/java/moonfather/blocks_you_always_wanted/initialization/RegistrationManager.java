@@ -7,6 +7,7 @@ import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -33,7 +34,8 @@ public class RegistrationManager
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Constants.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Constants.MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Constants.MODID);
-    public static List<Item> itemsForCreativeTabs = new ArrayList<>();
+    public static List<GateHolderItem> itemsForCreativeTabBuilding = new ArrayList<>();
+    public static List<Item> itemsForCreativeTabDecorative = new ArrayList<>();
 
     public static void init(IEventBus modBus)
     {
@@ -80,13 +82,13 @@ public class RegistrationManager
             // fences, slabs
             if (MainConfig.COMMON.FencesEnabled.get())
             {
-                String prefix0 = "fence_raised_";
-                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFence(Blocks.OAK_FENCE));
-                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFence(Blocks.SPRUCE_FENCE));
-                prefix0 = "fence_base_slab_";
-                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFenceBase(Blocks.OAK_SLAB));
-                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFenceBase(Blocks.SPRUCE_SLAB));
-                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "smooth_stone"), () -> makeFenceBase(Blocks.SMOOTH_STONE_SLAB));
+//                String prefix0 = "fence_raised_";
+//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFence(Blocks.OAK_FENCE));
+//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFence(Blocks.SPRUCE_FENCE));
+//                prefix0 = "fence_base_slab_";
+//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFenceBase(Blocks.OAK_SLAB));
+//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFenceBase(Blocks.SPRUCE_SLAB));
+//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "smooth_stone"), () -> makeFenceBase(Blocks.SMOOTH_STONE_SLAB));
             }
             // gates
             if (MainConfig.COMMON.GatesEnabled.get())
@@ -94,6 +96,20 @@ public class RegistrationManager
                 TriConsumer<String, String, Supplier<Block>> action = (prefix, type, block) -> event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix + type), block);
                 registerGate(Blocks.OAK_FENCE_GATE, Blocks.OAK_SLAB, WoodType.OAK, action);
                 registerGate(Blocks.SPRUCE_FENCE_GATE, Blocks.SPRUCE_SLAB, WoodType.SPRUCE, action);
+            }
+            // shoji
+            if (MainConfig.COMMON.WallsEnabled.get())
+            {
+                Block wall1 = new PaperWallBlock();
+                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "shoji_main_wall"), () -> wall1);
+                Item wall1Item = new PaperWallItem(wall1, null);
+                itemsForCreativeTabDecorative.add(wall1Item);
+                itemsToRegister.put("shoji_main_wall", wall1Item);
+                Block wall2 = new PaperWallBlock();
+                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "shoji_main_cabinet"), () -> wall2);
+                Item wall2Item = new PaperWallItem(wall2, wall1Item);
+                itemsForCreativeTabDecorative.add(wall2Item);
+                itemsToRegister.put("shoji_main_cabinet", wall2Item);
             }
             return;
         }
@@ -115,8 +131,8 @@ public class RegistrationManager
         registrationAction.accept("gate_main_",  woodType.name(), () -> gate1);
         Block gate2 = new GateRaisedBlock(originalGate, originalSlab, woodType);
         registrationAction.accept("gate_spec_",  woodType.name(), () -> gate2);
-        Item gateItem = new GateHolderItem(gate1, originalGate.asItem());
-        itemsForCreativeTabs.add(gateItem);
+        GateHolderItem gateItem = new GateHolderItem(gate1, originalGate.asItem());
+        itemsForCreativeTabBuilding.add(gateItem);
         itemsToRegister.put("gate_main_" + woodType.name(), gateItem);
     }
 

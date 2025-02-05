@@ -31,9 +31,16 @@ public class BlocksMod
     {
         if (MainConfig.COMMON.GatesEnabled.get() && event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
         {
-            for (Item item : RegistrationManager.itemsForCreativeTabs)
+            for (GateHolderItem item : RegistrationManager.itemsForCreativeTabBuilding)
             {
-                event.insertAfter(((GateHolderItem) item).getOriginal().getDefaultInstance(), item.getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.insertAfter(item.getOriginal().getDefaultInstance(), item.getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            }
+        }
+        if (MainConfig.COMMON.GatesEnabled.get() && event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS)
+        {
+            for (Item item : RegistrationManager.itemsForCreativeTabDecorative)
+            {
+                event.accept(item.getDefaultInstance());
             }
         }
     }
