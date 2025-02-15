@@ -7,9 +7,7 @@ import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SignBlock;
@@ -155,16 +153,18 @@ public class RegistrationManager
 
     private static Block makeFence(Block original)
     {
-        Block ourFence = new FenceMainBlock(original);
-        fenceBlocksByOriginal.put(original, ourFence);
-        return ourFence;
+        //Block ourFence = new FenceMainBlock(original);
+        //fenceBlocksByOriginal.put(original, ourFence);
+        //return ourFence;
+        return null;
     }
 
     private static Block makeFenceBase(Block slab)
     {
-        Block ourSlab = new FenceBearingSlabBlock(slab);
-        slabBlocksByOriginal.put(slab, ourSlab);
-        return ourSlab;
+        //Block ourSlab = new FenceBearingSlabBlock(slab);
+        //slabBlocksByOriginal.put(slab, ourSlab);
+        //return ourSlab;
+        return null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////

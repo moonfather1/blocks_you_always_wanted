@@ -1,6 +1,6 @@
-package moonfather.blocks_you_always_wanted.events;
+package moonfather.blocks_you_always_wanted.events.obsolete2;
 
-import moonfather.blocks_you_always_wanted.blocks.FenceMainBlock;
+import moonfather.blocks_you_always_wanted.blocks.obsolete2.FenceMainBlock;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -8,7 +8,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 @EventBusSubscriber
 public class OtherFenceEvents
 {
-    @SubscribeEvent
+    //@SubscribeEvent
     public static void onBreakSpeedCheck(PlayerEvent.BreakSpeed event)
     {
         if (event.getState().getBlock() instanceof FenceMainBlock fence)

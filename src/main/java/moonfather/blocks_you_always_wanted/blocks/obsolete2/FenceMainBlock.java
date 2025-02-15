@@ -1,4 +1,4 @@
-package moonfather.blocks_you_always_wanted.blocks;
+package moonfather.blocks_you_always_wanted.blocks.obsolete2;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
