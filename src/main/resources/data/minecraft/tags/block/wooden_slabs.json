@@ -1,7 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    { "id": "blocks_you_always_wanted:fence_base_slab_oak", "required": false },
-    { "id": "blocks_you_always_wanted:fence_base_slab_spruce", "required": false }
-  ]
-}

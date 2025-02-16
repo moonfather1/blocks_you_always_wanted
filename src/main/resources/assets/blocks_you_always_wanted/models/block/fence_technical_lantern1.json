@@ -5,8 +5,8 @@
         "particle": "#lantern"
     },
     "elements": [
-        {   "from": [ 5, 7, 5 ],
-            "to": [ 11, 14, 11 ],
+        {   "from": [ 4.99, 7, 4.99 ],
+            "to": [ 11.01, 14.01, 11.01 ],
             "faces": {
                 "down":  { "uv": [  0, 9,  6, 15 ], "texture": "#lantern", "cullface": "down" },
                 "up":    { "uv": [  0, 9,  6, 15 ], "texture": "#lantern" },

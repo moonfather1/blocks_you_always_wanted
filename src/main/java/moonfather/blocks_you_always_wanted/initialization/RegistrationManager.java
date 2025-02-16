@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -47,7 +48,6 @@ public class RegistrationManager
 
     private static final List<Block> signBlocks = new ArrayList<>();
     private static final Map<Block, Block> signBlocksByOriginal = new HashMap<>(); // remove if original is made public
-    private static final Map<Block, Block> slabBlocksByOriginal = new HashMap<>();
     private static final Map<Block, Block> fenceBlocksByOriginal = new HashMap<>();
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShopSignBlockEntity>> SIGN_BE = BLOCK_ENTITIES.register("sign_be", () -> BlockEntityType.Builder.of(ShopSignBlockEntity::new, listToArray(signBlocks)).build(null));
     public static final DeferredBlock<Block> GATE_TECHNICAL = BLOCKS.register("gate_technical_block", GateTechnicalBlock::new);
@@ -77,16 +77,12 @@ public class RegistrationManager
                 event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix1 + "spruce"), () -> makeSign(Blocks.SPRUCE_HANGING_SIGN));
                 event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix2 + "spruce"), () -> makeSign(Blocks.SPRUCE_WALL_HANGING_SIGN));
             }
-            // fences, slabs
+            // fences
             if (MainConfig.COMMON.FencesEnabled.get())
             {
-//                String prefix0 = "fence_raised_";
-//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFence(Blocks.OAK_FENCE));
-//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFence(Blocks.SPRUCE_FENCE));
-//                prefix0 = "fence_base_slab_";
-//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFenceBase(Blocks.OAK_SLAB));
-//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFenceBase(Blocks.SPRUCE_SLAB));
-//                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "smooth_stone"), () -> makeFenceBase(Blocks.SMOOTH_STONE_SLAB));
+                String prefix0 = "fence_raised_";
+                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "oak"), () -> makeFence(Blocks.OAK_FENCE));
+                event.register(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix0 + "spruce"), () -> makeFence(Blocks.SPRUCE_FENCE));
             }
             // gates
             if (MainConfig.COMMON.GatesEnabled.get())
@@ -153,18 +149,9 @@ public class RegistrationManager
 
     private static Block makeFence(Block original)
     {
-        //Block ourFence = new FenceMainBlock(original);
-        //fenceBlocksByOriginal.put(original, ourFence);
-        //return ourFence;
-        return null;
-    }
-
-    private static Block makeFenceBase(Block slab)
-    {
-        //Block ourSlab = new FenceBearingSlabBlock(slab);
-        //slabBlocksByOriginal.put(slab, ourSlab);
-        //return ourSlab;
-        return null;
+        Block ourFence = new FenceVersion3Block(original);
+        fenceBlocksByOriginal.put(original, ourFence);
+        return ourFence;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -177,10 +164,5 @@ public class RegistrationManager
     public static Block getFenceFromOriginal(Block original)
     {
         return fenceBlocksByOriginal.getOrDefault(original, null);
-    }
-
-    public static Block getSlabFromOriginal(Block original)
-    {
-        return slabBlocksByOriginal.getOrDefault(original, null);
     }
 }

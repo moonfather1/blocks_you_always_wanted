@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "tag": "c:dyes/brown"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "blocks_you_always_wanted:shoji_main_wall"
+  },
+  "conditions":
+  [
+    {
+      "type": "blocks_you_always_wanted:optional",
+      "flag_code": "paper_walls_enabled"
+    }
+  ]
+}

@@ -4,10 +4,13 @@
   "compatibilityLevel": "JAVA_21",
   "package": "moonfather.blocks_you_always_wanted.mixins",
   "mixins": [
-    "FenceMixins",
+    "BlockMixinBase",
+    "LeadItemMixins",
+    "LeadKnotMixins",
     "MinecartMixins",
     "PoweredRailMixins",
-    "RailStateMixins"
+    "RailStateMixins",
+    "SlabMixins"
   ],
   "client": [
   ],

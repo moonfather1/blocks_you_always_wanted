@@ -11,7 +11,7 @@
         "uvlock": true
       },
       "when": {
-        "north": "true"
+        "north_c": 4
       }
     },
     {
@@ -21,7 +21,7 @@
         "y": 90
       },
       "when": {
-        "east": "true"
+        "east_c": 4
       }
     },
     {
@@ -31,7 +31,7 @@
         "y": 180
       },
       "when": {
-        "south": "true"
+        "south_c": 4
       }
     },
     {
@@ -41,7 +41,7 @@
         "y": 270
       },
       "when": {
-        "west": "true"
+        "west_c": 4
       }
     },
     {
@@ -50,7 +50,7 @@
         "uvlock": true
       },
       "when": {
-        "north_dn": "true"
+        "north_c": 1
       }
     },
     {
@@ -60,7 +60,7 @@
         "y": 90
       },
       "when": {
-        "east_dn": "true"
+        "east_c": 1
       }
     },
     {
@@ -70,7 +70,7 @@
         "y": 180
       },
       "when": {
-        "south_dn": "true"
+        "south_c": 1
       }
     },
     {
@@ -80,7 +80,7 @@
         "y": 270
       },
       "when": {
-        "west_dn": "true"
+        "west_c": 1
       }
     },
     {
@@ -89,7 +89,7 @@
         "uvlock": true
       },
       "when": {
-        "north_up": "true"
+        "north_c": 2
       }
     },
     {
@@ -99,7 +99,7 @@
         "y": 90
       },
       "when": {
-        "east_up": "true"
+        "east_c": 2
       }
     },
     {
@@ -109,7 +109,7 @@
         "y": 180
       },
       "when": {
-        "south_up": "true"
+        "south_c": 2
       }
     },
     {
@@ -119,7 +119,85 @@
         "y": 270
       },
       "when": {
-        "west_up": "true"
+        "west_c": 2
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true
+      },
+      "when": {
+        "north_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_downwards_spruce",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true
+      },
+      "when": {
+        "north_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_c": 3
+      }
+    },
+    {
+      "apply": {
+        "model": "blocks_you_always_wanted:block/raised_fence_side_upwards_spruce",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west_c": 3
       }
     },
     {

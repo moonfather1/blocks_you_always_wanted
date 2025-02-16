@@ -2,6 +2,7 @@ package moonfather.blocks_you_always_wanted.events;
 
 import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.MainConfig;
+import moonfather.blocks_you_always_wanted.blocks.FenceVersion3Block;
 import moonfather.blocks_you_always_wanted.blocks.GateBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateRaisedBlock;
 import moonfather.blocks_you_always_wanted.blocks.GateTechnicalBlock;
@@ -100,16 +101,16 @@ public class OtherGateEvents
             {
                 temp1.move(event.getEntity().getDirection().getClockWise());
                 BlockState side = event.getLevel().getBlockState(temp1);
-                boolean ok = side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES);
+                boolean ok = side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || side.getBlock() instanceof FenceVersion3Block;
                 temp1.move(event.getEntity().getDirection().getCounterClockWise(), 2);
                 side = event.getLevel().getBlockState(temp1);
-                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES);
+                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || side.getBlock() instanceof FenceVersion3Block;
                 temp1.move(Direction.DOWN);
                 side = event.getLevel().getBlockState(temp1);
-                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && (! side.hasProperty(SlabBlock.TYPE) || side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM)));
+                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && side.hasProperty(SlabBlock.TYPE) && side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM));
                 temp1.move(event.getEntity().getDirection().getClockWise(), 2);
                 side = event.getLevel().getBlockState(temp1);
-                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && (! side.hasProperty(SlabBlock.TYPE) || side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM)));
+                ok &= side.isAir() || side.is(BlockTags.FENCES) || side.is(BlockTags.WALLS) || side.is(Constants.BlockTags.ALLOWED_NEXT_TO_GATES) || (side.is(BlockTags.SLABS) && side.hasProperty(SlabBlock.TYPE) && side.getValue(SlabBlock.TYPE).equals(SlabType.BOTTOM));
                 if (! ok)
                 {
                     event.getEntity().displayClientMessage(Constants.Messages.MESSAGE_NO_ROOM_SIDE, true);
