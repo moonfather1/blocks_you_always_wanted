@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:anvil",
+    "minecraft:grindstone",
+    { "id": "tconstruct:scorched_anvil", "required": false },
+    { "id": "tconstruct:tinkers_anvil", "required": false }
+  ]
+}

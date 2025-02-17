@@ -15,6 +15,8 @@ public class Constants
     public static class ItemTags
     {
         public static final TagKey<Item> GC_WAX = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("growthcraft_apiary:bees_wax"));
+        public static final TagKey<Item> SIGN_BLACKLIST = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("blocks_you_always_wanted:not_allowed_on_signs"));
+        public static final TagKey<Item> SIGN_ANVILS = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("blocks_you_always_wanted:anvil_scaling_on_signs"));
     }
 
     public static class BlockTags
@@ -32,5 +34,6 @@ public class Constants
         public static final Component MESSAGE_RAIL_TYPE = Component.translatable("messages.blocks_you_always_wanted.rail_type").withStyle(Style.EMPTY.withColor(0xff998855));
         public static final Component MESSAGE_STRAIGHT_ONLY = Component.translatable("messages.blocks_you_always_wanted.straight_rails_only").withStyle(Style.EMPTY.withColor(0xff998855));
         public static final Component MESSAGE_WRONG_ANGLE = Component.translatable("messages.blocks_you_always_wanted.rails_wrong_angle").withStyle(Style.EMPTY.withColor(0xff998855));
+        public static final Component MESSAGE_ITEM_NOT_ALLOWED_ON_SIGN = Component.translatable("messages.blocks_you_always_wanted.item_not_allowed_on_sign").withStyle(Style.EMPTY.withColor(0xff998855));
     }
 } 

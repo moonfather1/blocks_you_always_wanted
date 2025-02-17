@@ -3,6 +3,7 @@ package moonfather.blocks_you_always_wanted.rendering;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import moonfather.blocks_you_always_wanted.Constants;
 import moonfather.blocks_you_always_wanted.storage.ShopSignBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
@@ -64,9 +65,9 @@ public class ShopSignRenderer implements BlockEntityRenderer<ShopSignBlockEntity
         {
             return;
         }
-        else if (blockEntity.getItem().is(Items.ANVIL) || blockEntity.getItem().is(Items.GRINDSTONE))
+        else if (blockEntity.getItem().is(Constants.ItemTags.SIGN_ANVILS))
         {
-            // anvil. useful for blacksmith shops. yes i know the condition is lacking.
+            // anvil. useful for blacksmith shops.
             float size = 0.75f;
             poseStack.scale(size, size, 0.15f);
             poseStack.translate(0.0F, -0.45F, +0.375F);
@@ -103,9 +104,17 @@ public class ShopSignRenderer implements BlockEntityRenderer<ShopSignBlockEntity
         {
             // trident, shield (handled above)...
             float size = 0.55f;
-            poseStack.scale(size, size, 2.7f);
-            poseStack.translate(0.0F, -0.5F, -0.001F);
+            poseStack.scale(size, size, 0.01f);
+            poseStack.translate(0.0F, -0.635F, -7.03F);
             Minecraft.getInstance().getItemRenderer().renderStatic(blockEntity.getItem(), ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, blockEntity.getLevel(), renderId);
+            poseStack.mulPose(ROTATE_Y_180);
+            poseStack.translate(0.0F, 0.0F, -14F);
+            Minecraft.getInstance().getItemRenderer().renderStatic(blockEntity.getItem(), ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, blockEntity.getLevel(), renderId);
+            // initial version had this code, i don't know what for. above is based on embers tools.
+//            float size = 0.55f;
+//            poseStack.scale(size, size, 2.7f);
+//            poseStack.translate(0.0F, -0.5F, -0.001F);
+//            Minecraft.getInstance().getItemRenderer().renderStatic(blockEntity.getItem(), ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, blockEntity.getLevel(), renderId);
         }
         else
         {
