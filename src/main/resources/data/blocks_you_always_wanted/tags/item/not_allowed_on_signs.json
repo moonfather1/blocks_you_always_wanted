@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:end_rod",
+    { "id": "growthcraft_cellar:culture_jar", "required": false },
+    { "id": "tconstruct:cleaver", "required": false }
+  ]
+}

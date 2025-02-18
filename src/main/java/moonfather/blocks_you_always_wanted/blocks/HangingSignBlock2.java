@@ -55,6 +55,11 @@ public class HangingSignBlock2 extends WallHangingSignBlock
             }
             if (hand.equals(InteractionHand.MAIN_HAND))
             {
+                if (player.getItemInHand(hand).is(Constants.ItemTags.SIGN_BLACKLIST))
+                {
+                    player.displayClientMessage(Constants.Messages.MESSAGE_ITEM_NOT_ALLOWED_ON_SIGN, true);
+                    return ItemInteractionResult.CONSUME;
+                }
                 if (signBlockEntity.isWaxed())
                 {
                     return ItemInteractionResult.FAIL;

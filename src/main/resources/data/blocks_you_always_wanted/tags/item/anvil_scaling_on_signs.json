@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:anvil",
+    "minecraft:grindstone",
+    { "id": "tconstruct:scorched_anvil", "required": false },
+    { "id": "tconstruct:tinkers_anvil", "required": false },
+    { "id": "tetra:forged_workbench", "required": false },
+    { "id": "miapi:modular_work_bench", "required": false }
+  ]
+}

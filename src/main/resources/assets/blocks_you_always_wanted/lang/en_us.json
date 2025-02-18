@@ -13,6 +13,7 @@
   "messages.blocks_you_always_wanted.rail_type": "Put the gate over powered rail or a common iron rail.",
   "messages.blocks_you_always_wanted.straight_rails_only": "Gate can go over straight rails only.",
   "messages.blocks_you_always_wanted.rails_wrong_angle": "Put the gate across rails (from another angle).",
+  "messages.blocks_you_always_wanted.item_not_allowed_on_sign": "You can't put that on a sign.",
   "block.blocks_you_always_wanted.gate_main_oak": "Wide gate (oak)",
   "block.blocks_you_always_wanted.gate_main_spruce": "Wide gate (spruce)",
   "block.blocks_you_always_wanted.gate_spec_oak": "Wide gate (oak)",

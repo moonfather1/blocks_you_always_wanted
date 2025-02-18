@@ -118,7 +118,7 @@ configurations {
 }
 
 dependencies {
-    //implementation "curse.maven:through-the-lily-pads-gently-903017:5489436"
+    //runtimeOnly "curse.maven:through-the-lily-pads-gently-903017:5489436"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
